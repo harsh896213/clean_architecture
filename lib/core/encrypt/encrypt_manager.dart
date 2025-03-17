@@ -12,7 +12,7 @@ class EncryptionManager {
 
     final encrypted = encrypter.encrypt(data, iv: iv);
 
-    return encrypted.base64; // Return the encrypted data as base64
+    return encrypted.base64; // Return the encrypted database as base64
   }
 
   static String decryptData(String encryptedData) {
