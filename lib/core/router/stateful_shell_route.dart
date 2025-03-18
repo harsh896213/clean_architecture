@@ -2,14 +2,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pva/core/widgets/drawer_builder.dart';
 import 'package:pva/core/widgets/scaffold_with_bottom_navbar.dart';
+import 'package:pva/feature/chat/presentation/pages/chat_list_screen.dart';
 import 'package:pva/feature/drawer/data/models/drawer_config_model.dart';
 import 'package:pva/feature/drawer/presentation/bloc/drawer_bloc.dart';
 import 'package:pva/feature/drawer/presentation/bloc/drawer_state.dart';
-import 'package:pva/feature/home/presentation/calendar_page.dart';
-import 'package:pva/feature/home/presentation/chat_page.dart';
 import 'package:pva/feature/home/presentation/home_page.dart';
 import 'package:pva/feature/home/presentation/medication_page.dart';
 import 'package:pva/feature/home/presentation/settings_page.dart';
+
+import '../../feature/appointment/presentation/pages/appointment_page.dart';
 
 RouteBase stateFulShellRoute() => StatefulShellRoute(
   builder: (context, state, navigationShell) {
@@ -96,15 +97,21 @@ RouteBase stateFulShellRoute() => StatefulShellRoute(
       routes: [
         GoRoute(
           path: '/medication',
-          builder: (context, state) => const MedicationPage(),
+          builder: (context, state) {
+            final DateTime today = DateTime.now();
+            return AppointmentPage(selectedDate: today);
+          },
         ),
       ],
     ),
     StatefulShellBranch(
       routes: [
         GoRoute(
-          path: '/calendar',
-          builder: (context, state) => const CalendarPage(),
+          path: '/appointments',
+          builder: (context, state) {
+            final DateTime today = DateTime.now();
+            return AppointmentPage(selectedDate: today);
+          },
         ),
       ],
     ),
@@ -112,7 +119,7 @@ RouteBase stateFulShellRoute() => StatefulShellRoute(
       routes: [
         GoRoute(
           path: '/chat',
-          builder: (context, state) => const ChatPage(),
+          builder: (context, state) => const ChatListScreen(),
         ),
       ],
     ),
