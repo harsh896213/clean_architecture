@@ -7,36 +7,48 @@ import '../bloc/appoitment_bloc.dart';
 import '../bloc/appoitment_event.dart';
 import '../widgets/week_calender_widget.dart';
 
-class AppointmentPage extends StatelessWidget {
-  final DateTime selectedDate;
+class AppointmentPage extends StatefulWidget {
+  const AppointmentPage({Key? key}) : super(key: key);
 
-  const AppointmentPage({
-    super.key,
-    required this.selectedDate,
-  });
+  @override
+  State<AppointmentPage> createState() => AppointmentPageState();
+}
+
+class AppointmentPageState extends State<AppointmentPage> {
+  late DateTime _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = DateTime.now();
+  }
+
+  void _onDateSelected(DateTime date) {
+    setState(() {
+      _selectedDate = date;
+    });
+    // Here you would fetch appointments for the selected date
+    // and update the list below
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Appointments'),
-      ),
-      body: BlocProvider(
+    return BlocProvider(
         create: (context) => getIt<AppointmentBloc>()..add(FetchAppointments()),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              WeekCalendar(currentDate: DateTime.now(),
-                onDateSelected: (date) {
-                  print('Selected date: $date');
-                },
-              ),
-              _buildAppointmentsList(),
-            ],
+        child: Scaffold(
+          body: SafeArea(
+            child: Column(
+              children: [
+                WeeklyCalendarWidget(
+                  onDateSelected: _onDateSelected,
+                ),
+                Expanded(
+                  child: _buildAppointmentsList(),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _buildAppointmentsList() {

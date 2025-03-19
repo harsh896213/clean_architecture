@@ -1,147 +1,219 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class WeekCalendar extends StatefulWidget {
-  final DateTime currentDate; // Current date passed from the parent
-  final Function(DateTime) onDateSelected; // Callback for date selection
+class WeeklyCalendarWidget extends StatefulWidget {
+  final Function(DateTime) onDateSelected;
+  // final Function(DateTime)? checkAppointments;
 
-  const WeekCalendar({
-    super.key,
-    required this.currentDate,
+  const WeeklyCalendarWidget({
+    Key? key,
     required this.onDateSelected,
-  });
+    // this.checkAppointments,
+  }) : super(key: key);
 
   @override
-  State<WeekCalendar> createState() => _WeekCalendarState();
+  State<WeeklyCalendarWidget> createState() => _WeeklyCalendarWidgetState();
 }
 
-class _WeekCalendarState extends State<WeekCalendar> {
+class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> {
   late DateTime _selectedDate;
-  late ScrollController _scrollController;
-  final double _itemWidth = 80.0; // Width of each day cell
+  late DateTime _today;
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.currentDate; // Initialize with the current date
-    _scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelectedDate());
-  }
+    _today = DateTime.now();
+    _selectedDate = _today;
+    _pageController = PageController(initialPage: 0);
 
-  // Scroll to the selected date when the widget is first built
-  void _scrollToSelectedDate() {
-    final offset = (_selectedDate.weekday - 1) * _itemWidth;
-    _scrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
-  }
-
-  // Handle scroll end event to snap to the nearest date
-  void _handleScrollEnd() {
-    final scrollOffset = _scrollController.offset;
-    final index = (scrollOffset / _itemWidth).round();
-    final newDate = _getDateForIndex(index);
-
-    if (newDate != _selectedDate) {
-      setState(() => _selectedDate = newDate);
-      widget.onDateSelected(newDate); // Notify parent of the new selected date
-    }
-  }
-
-  // Handle date selection when a day is clicked
-  void _handleDateClick(DateTime date) {
-    setState(() => _selectedDate = date);
-    widget.onDateSelected(date); // Notify parent of the new selected date
-    _scrollToSelectedDate(); // Scroll to the selected date
-  }
-
-  // Get the date for a specific index in the list
-  DateTime _getDateForIndex(int index) {
-    // Calculate the start of the week (Monday)
-    final startOfWeek = widget.currentDate.subtract(Duration(days: widget.currentDate.weekday - 1));
-    // Return the date for the given index
-    return startOfWeek.add(Duration(days: index));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification is ScrollEndNotification) {
-            _handleScrollEnd();
-          }
-          return false;
-        },
-        child: ListView.builder(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          itemExtent: _itemWidth,
-          itemBuilder: (context, index) {
-            final date = _getDateForIndex(index);
-            final isSelected = date == _selectedDate;
-            return _DayCell(
-              date: date,
-              isSelected: isSelected,
-              onTap: () => _handleDateClick(date),
-            );
-          },
-        ),
-      ),
-    );
+    // Notify parent about initial selected date
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onDateSelected(_selectedDate);
+    });
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
-}
 
-class _DayCell extends StatelessWidget {
-  final DateTime date;
-  final bool isSelected;
-  final VoidCallback onTap;
+  // Generate 7 dates for a week starting from the given date
+  List<DateTime> _generateWeekDates(DateTime startDate) {
+    // Find the previous Sunday (or the current day if it's Sunday)
+    final firstDayOfWeek = startDate.subtract(Duration(days: startDate.weekday % 7));
+    return List.generate(7, (index) =>
+        firstDayOfWeek.add(Duration(days: index)));
+  }
 
-  const _DayCell({
-    required this.date,
-    required this.isSelected,
-    required this.onTap,
-  });
+  void _onPageChanged(int page) {
+    // Update the selected date when page changes
+    final newStartDate = _today.add(Duration(days: page * 7));
+    setState(() {
+      // Keep the selected date in the new week
+      _selectedDate = newStartDate;
+    });
+    widget.onDateSelected(_selectedDate);
+  }
+
+  void _previousWeek() {
+    _pageController.previousPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _nextWeek() {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap, // Handle date click
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.grey[200],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              DateFormat('E').format(date), // Day of the week (e.g., Mon, Tue)
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.white : Colors.black,
-              ),
+    return Column(
+      children: [
+        // Title with the current month and year
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          alignment: Alignment.center,
+          child: Text(
+            DateFormat('MMMM yyyy').format(_selectedDate),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
             ),
-            Text(
-              date.day.toString(), // Day of the month
-              style: TextStyle(
-                fontSize: 18,
-                color: isSelected ? Colors.white : Colors.black,
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+
+        // Calendar week view with navigation arrows
+        Container(
+          height: 100,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              top: BorderSide(color: Colors.grey[300]!),
+              bottom: BorderSide(color: Colors.grey[300]!),
+            ),
+          ),
+          child: Row(
+            children: [
+              // Left arrow
+              IconButton(
+                icon: const Icon(Icons.chevron_left),
+                onPressed: _previousWeek,
+              ),
+
+              // Calendar days
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: _onPageChanged,
+                  itemBuilder: (context, page) {
+                    final startDate = _today.add(Duration(days: page * 7));
+                    final weekDates = _generateWeekDates(startDate);
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: weekDates.map((date) {
+                        // Check if this date is selected
+                        final isSelected = date.day == _selectedDate.day &&
+                            date.month == _selectedDate.month &&
+                            date.year == _selectedDate.year;
+
+                        // Check if this date has appointments
+                        final hasAppointments = false;
+
+                        // Day of week abbreviation
+                        final dayOfWeek = DateFormat('EEE').format(date).toUpperCase();
+
+                        return Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _selectedDate = date;
+                              });
+                              widget.onDateSelected(date);
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Day of week
+                                Text(
+                                  dayOfWeek,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+
+                                // Date number in a circle
+                                Container(
+                                  width: 44,
+                                  height: 44,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: isSelected ? Colors.blue : Colors.transparent,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      date.day.toString(),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: isSelected ? Colors.white : Colors.black,
+                                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                // Appointment indicator dot
+                                const SizedBox(height: 4),
+                                if (hasAppointments)
+                                  Container(
+                                    width: 4,
+                                    height: 4,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
+              ),
+
+              // Right arrow
+              IconButton(
+                icon: const Icon(Icons.chevron_right),
+                onPressed: _nextWeek,
+              ),
+            ],
+          ),
+        ),
+
+        // Appointments for the selected date
+        Container(
+          padding: const EdgeInsets.all(16),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Appointments for ${DateFormat('MMMM d, yyyy').format(_selectedDate)}',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
+
