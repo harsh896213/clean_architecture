@@ -8,7 +8,9 @@ import '../bloc/chat/chat_state.dart';
 import 'chat_screen.dart';
 
 class ChatListScreen extends StatelessWidget {
-  const ChatListScreen({super.key});
+  final Function(String) onChatClick;
+
+  const ChatListScreen({super.key, required this.onChatClick});
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +31,7 @@ class ChatListScreen extends StatelessWidget {
                     title: Text('Chat ${chat.id}'),
                     subtitle: Text(chat.lastMessage ?? 'No messages yet'),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatScreen(chatId: chat.id),
-                        ),
-                      );
+                      onChatClick(chat.id);
                     },
                   );
                 },

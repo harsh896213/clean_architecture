@@ -5,7 +5,7 @@ import '../../../../core/di/get_it.dart';
 import '../bloc/appointment_state.dart';
 import '../bloc/appoitment_bloc.dart';
 import '../bloc/appoitment_event.dart';
-import '../widgets/calender_widget.dart';
+import '../widgets/week_calender_widget.dart';
 
 class AppointmentPage extends StatelessWidget {
   final DateTime selectedDate;
@@ -26,7 +26,11 @@ class AppointmentPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              CalendarWidget(selectedDate: selectedDate),
+              WeekCalendar(currentDate: DateTime.now(),
+                onDateSelected: (date) {
+                  print('Selected date: $date');
+                },
+              ),
               _buildAppointmentsList(),
             ],
           ),
