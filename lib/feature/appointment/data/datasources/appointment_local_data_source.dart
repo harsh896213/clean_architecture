@@ -48,17 +48,18 @@ class AppointmentLocalDataSourceImpl implements AppointmentLocalDataSource {
 
     // Fetch data using a JOIN query with correct dateTime comparison
     final result = await databaseHelper.database.rawQuery('''
-      SELECT 
-        Appointments.id,
-        Appointments.doctorId,
-        Appointments.patientId,
-        Appointments.dateTime,
-        Appointments.isVirtual,
-        Users.name AS doctorName,
-        Users.specialty
-      FROM Appointments
-      JOIN Users ON Appointments.doctorId = Users.id
-      WHERE Appointments.dateTime >= ? AND Appointments.dateTime < ?
+SELECT 
+  Appointments.id,
+  Appointments.doctorId,
+  Appointments.patientId,
+  Appointments.dateTime,
+  Appointments.isVirtual,
+  Users.name AS doctorName,
+  Users.specialty,
+  Appointments.profilePic
+FROM Appointments
+JOIN Users ON Appointments.doctorId = Users.id
+WHERE Appointments.dateTime >= ? AND Appointments.dateTime < ?
     ''', [startOfDay, endOfDay]);
 
     // Debug: Print query results

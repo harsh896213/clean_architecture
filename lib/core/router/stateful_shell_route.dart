@@ -97,7 +97,6 @@ RouteBase stateFulShellRoute() => StatefulShellRoute(
         GoRoute(
           path: '/medication',
           builder: (context, state) {
-            final DateTime today = DateTime.now();
             return AppointmentPage();
           },
         ),
@@ -108,7 +107,6 @@ RouteBase stateFulShellRoute() => StatefulShellRoute(
         GoRoute(
           path: '/appointments',
           builder: (context, state) {
-            final DateTime today = DateTime.now();
             return AppointmentPage();
           },
         ),

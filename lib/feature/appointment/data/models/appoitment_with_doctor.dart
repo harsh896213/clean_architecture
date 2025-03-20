@@ -6,6 +6,7 @@ class AppointmentWithDoctor {
   final int isVirtual;
   final String doctorName;
   final String specialty;
+  final String profilePic;
 
   AppointmentWithDoctor({
     required this.id,
@@ -15,6 +16,7 @@ class AppointmentWithDoctor {
     required this.isVirtual,
     required this.doctorName,
     required this.specialty,
+    required this.profilePic,
   });
 
   factory AppointmentWithDoctor.fromMap(Map<String, dynamic> map) {
@@ -26,6 +28,7 @@ class AppointmentWithDoctor {
       isVirtual: map['isVirtual'],
       doctorName: map['doctorName'] ?? '',
       specialty: map['specialty'] ?? '',
+      profilePic: map['profilePic'] ?? ''
     );
   }
 
