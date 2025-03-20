@@ -2,13 +2,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pva/core/widgets/drawer_builder.dart';
 import 'package:pva/core/widgets/scaffold_with_bottom_navbar.dart';
-import 'package:pva/feature/chat/presentation/pages/chat_list_screen.dart';
 import 'package:pva/feature/chat/presentation/pages/master_detail_chat_page.dart';
 import 'package:pva/feature/drawer/data/models/drawer_config_model.dart';
 import 'package:pva/feature/drawer/presentation/bloc/drawer_bloc.dart';
 import 'package:pva/feature/drawer/presentation/bloc/drawer_state.dart';
 import 'package:pva/feature/home/presentation/home_page.dart';
-import 'package:pva/feature/home/presentation/medication_page.dart';
 import 'package:pva/feature/home/presentation/settings_page.dart';
 
 import '../../feature/appointment/presentation/pages/appointment_page.dart';

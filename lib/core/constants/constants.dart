@@ -1,9 +1,10 @@
 class Constants {
   static const noConnectionErrorMessage = 'Not connected to a network!';
 
-  static const tableNameChat = 'chats';
-  static const tableNameMessage = 'messages';
-  static const tableNameUsers = 'users';
-  static const tableNameAppointments = 'appointments';
+  static const tableNameChat = 'Chats';
+  static const tableNameMessage = 'Messages';
+  static const tableNameUsers = 'Users';
+  static const tableNameAppointments = 'Appointments';
+  static const tableNameChatParticipants= 'ChatParticipants';
 
 }

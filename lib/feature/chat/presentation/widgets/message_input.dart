@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/message.dart';
 import '../bloc/chat/chat_bloc.dart';
 import '../bloc/chat/chat_event.dart';
+import '../bloc/chat/chat_state.dart';
 
 class MessageInput extends StatefulWidget {
   const MessageInput({super.key});
@@ -31,41 +32,75 @@ class _MessageInputState extends State<MessageInput> {
   }
 
   void _updateSendButtonState() {
-    setState(() {
-      _isSendButtonEnabled = _controller.text.trim().isNotEmpty;
-    });
+    final isEnabled = _controller.text.trim().isNotEmpty;
+    if (_isSendButtonEnabled != isEnabled) {
+      setState(() {
+        _isSendButtonEnabled = isEnabled;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        border: Border(
+          top: BorderSide(
+            color: Theme.of(context).dividerColor,
+            width: 0.5,
+          ),
+        ),
+      ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _controller,
               decoration: const InputDecoration(
-                hintText: 'Type a message...',
+                hintText: 'Type a message',
                 border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
+              minLines: 1,
+              maxLines: 4,
             ),
           ),
+          const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.send),
             onPressed: _isSendButtonEnabled
                 ? () {
+              // Get the current state of the bloc to extract necessary information
+              final currentState = context.read<ChatBloc>().state;
+              String chatId;
+
+              // Extract the chat ID from the current state
+              if (currentState is MessagesLoaded) {
+                chatId = currentState.chatId;
+              } else {
+                // Fallback - this should not happen in normal operation
+                print('Warning: Unable to determine chat ID from state');
+                return;
+              }
+
               final message = Message(
-                id: DateTime.now().toString(),
-                chatId: 'chat1',
-                senderId: '1',
-                content: _controller.text,
+                id: DateTime.now().millisecondsSinceEpoch.toString(),
+                chatId: chatId,
+                // Use a consistent user ID or get it from your auth system
+                senderId: 'currentUserId', // Replace with actual user ID from your auth system
+                content: _controller.text.trim(),
                 timestamp: DateTime.now(),
               );
+
               context.read<ChatBloc>().add(SendMessage(message));
               _controller.clear();
             }
                 : null,
+            color: _isSendButtonEnabled
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).disabledColor,
           ),
         ],
       ),

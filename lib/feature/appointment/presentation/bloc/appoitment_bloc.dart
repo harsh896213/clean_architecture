@@ -16,7 +16,8 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
       ) async {
     emit(AppointmentLoading());
     try {
-      final appointments = await repository.getAppointments();
+      final appointments = await repository.getAppointments(event.date);
+      print('All appointments $appointments');
       emit(AppointmentLoaded(appointments));
     } catch (e) {
       emit(AppointmentError('Failed to fetch appointments: $e'));

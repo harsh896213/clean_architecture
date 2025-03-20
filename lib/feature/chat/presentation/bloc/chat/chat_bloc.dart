@@ -17,6 +17,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(ChatLoading());
     try {
       final chats = await chatRepository.getAllChats();
+      print('All chats $chats');
       emit(ChatsLoaded(chats));
     } catch (e) {
       emit(ChatError(e.toString()));
@@ -35,9 +36,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(MessagesLoading());
     try {
       final messagesStream = chatRepository.watchMessages(event.chatId);
-      emit(MessagesLoaded(messagesStream));
+      emit(MessagesLoaded(messagesStream, event.chatId)); // Added chatId
     } catch (e) {
-      emit(ChatError(e.toString()));
+      emit(MessagesError(e.toString()));
     }
   }
 }

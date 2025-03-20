@@ -34,7 +34,7 @@ class AppointmentPageState extends State<AppointmentPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => getIt<AppointmentBloc>()..add(FetchAppointments()),
+        create: (context) => getIt<AppointmentBloc>()..add(FetchAppointments(_selectedDate)),
         child: Scaffold(
           body: SafeArea(
             child: Column(

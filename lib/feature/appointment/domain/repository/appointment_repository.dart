@@ -1,5 +1,6 @@
-import '../../data/models/appointment.dart';
+import 'package:pva/feature/appointment/data/models/appoitment_with_doctor.dart';
+
 
 abstract interface class AppointmentRepository {
-  Future<List<Appointment>> getAppointments();
+  Future<List<AppointmentWithDoctor>> getAppointments(DateTime selectedDate);
 }

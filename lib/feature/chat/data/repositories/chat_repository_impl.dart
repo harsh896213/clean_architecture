@@ -1,3 +1,5 @@
+import 'package:pva/feature/chat/data/models/chat_with_participants.dart';
+
 import '../../../../core/common/entities/user.dart';
 import '../../domain/repository/chat_repository.dart';
 import '../datasources/local_chat_data_source_impl.dart';
@@ -25,7 +27,7 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<List<Chat>> getAllChats() async {
+  Future<List<ChatWithParticipants>> getAllChats() async {
     return await localDataSource.getAllChats();
   }
 

@@ -1,11 +1,8 @@
-import 'dart:convert';
-
+import 'package:path/path.dart';
 import 'package:pva/core/constants/constants.dart';
 import 'package:pva/core/local/database/domain/database_repository.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
-import 'package:path/path.dart';
-
-import '../../../../feature/appointment/data/models/appointment.dart';
+import 'dummy_data.dart';
 
 class DatabaseHelper implements DatabaseRepository {
   static Database? _database;
@@ -24,18 +21,26 @@ class DatabaseHelper implements DatabaseRepository {
           CREATE TABLE ${Constants.tableNameUsers}(
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
-            email TEXT,
-            type INTEGER NOT NULL
+            email TEXT NOT NULL UNIQUE,
+            type INTEGER NOT NULL,
+            specialty TEXT 
           )
         ''');
         db.execute('''
           CREATE TABLE ${Constants.tableNameChat}(
             id TEXT PRIMARY KEY,
-            participantIds TEXT NOT NULL,
             lastActivity INTEGER NOT NULL,
             lastMessage TEXT,
             createdAt INTEGER NOT NULL
           )
+        ''');
+        db.execute('''
+        CREATE TABLE ${Constants.tableNameChatParticipants} (
+          chatId TEXT NOT NULL,
+          userId TEXT NOT NULL,
+          FOREIGN KEY(chatId) REFERENCES Chats(id),
+          FOREIGN KEY(userId) REFERENCES Users(id),
+          PRIMARY KEY (chatId, userId))
         ''');
         db.execute('''
           CREATE TABLE ${Constants.tableNameMessage}(
@@ -44,99 +49,56 @@ class DatabaseHelper implements DatabaseRepository {
             senderId TEXT NOT NULL,
             content TEXT NOT NULL,
             timestamp INTEGER NOT NULL,
-            status INTEGER NOT NULL
+            status INTEGER NOT NULL,
+            FOREIGN KEY(chatId) REFERENCES Chats(id),
+            FOREIGN KEY(senderId) REFERENCES Users(id)
           )
         ''');
         db.execute('''
-      CREATE TABLE appointments(
-        id TEXT PRIMARY KEY,
-        doctorName TEXT,
-        specialty TEXT,
-        dateTime TEXT,
-        isVirtual INTEGER
-      )
-    ''');
+    CREATE TABLE IF NOT EXISTS ${Constants.tableNameAppointments} (
+      id TEXT PRIMARY KEY,
+      doctorId TEXT NOT NULL,
+      patientId TEXT NOT NULL,
+      dateTime INTEGER NOT NULL,
+      isVirtual INTEGER NOT NULL,
+      profilePic TEXT,
+      FOREIGN KEY(doctorId) REFERENCES Users(id),
+      FOREIGN KEY(patientId) REFERENCES Users(id)
+    )
+  ''');
       },
     );
     seedDummyData();
     print('Database initialized successfully'); // Debug statement
   }
 
-  // Add this in your main function or a separate function
   Future<void> seedDummyData() async {
     final db = database;
 
     // Insert dummy users
-    await db.insert(
-      Constants.tableNameUsers,
-      {
-        'id': '1',
-        'name': 'Dr. Smith',
-        'type': 0, // Assuming 0 is the index for UserType.doctor
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-
-    await db.insert(
-      Constants.tableNameUsers,
-      {
-        'id': '2',
-        'name': 'Patient John',
-        'type': 2, // Assuming 2 is the index for UserType.patient
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-
-    // Insert dummy chat
-    await db.insert(
-      Constants.tableNameChat,
-      {
-        'id': 'chat1',
-        'participantIds': jsonEncode(['1', '2']), // Encode as JSON array
-        'lastActivity': DateTime.now().millisecondsSinceEpoch,
-        'lastMessage': 'Hello!',
-        'createdAt': DateTime.now().millisecondsSinceEpoch,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-
-    // Insert dummy message
-    await db.insert(
-      Constants.tableNameMessage,
-      {
-        'id': 'msg1',
-        'chatId': 'chat1',
-        'senderId': '1',
-        'content': 'Hello!',
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'status': 0,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-
-    final dummyAppointments = [
-      AppointmentModel(
-        id: '1',
-        doctorName: 'Dr. Sarah Wilson',
-        specialty: 'Cardiologist',
-        dateTime: DateTime(2025, 3, 18, 10, 0),
-        isVirtual: 1,
-      ),
-      AppointmentModel(
-        id: '2',
-        doctorName: 'Dr. John Doe',
-        specialty: 'Dermatologist',
-        dateTime: DateTime(2025, 3, 19, 14, 0),
-        isVirtual: 0,
-      ),
-    ];
-
-    for (var appointment in dummyAppointments) {
-      await db.insert(Constants.tableNameAppointments, appointment.toJson(),
-          conflictAlgorithm: ConflictAlgorithm.replace);
+    for (var user in users) {
+      await db.insert(Constants.tableNameUsers, user.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
     }
 
-    print('Dummy data seeded successfully'); // Debug statement
+    // Insert dummy chats
+    for (var chat in chats) {
+      await db.insert(Constants.tableNameChat, chat.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+
+    // Insert participants for each chat
+    for (var participant in chatParticipants) {
+      await db.insert(Constants.tableNameChatParticipants, participant, conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+
+    for(var message in messages) {
+      await db.insert(Constants.tableNameMessage, message.toJson(), conflictAlgorithm:  ConflictAlgorithm.replace);
+    }
+
+    for(var appointment in appointments) {
+      await db.insert(Constants.tableNameAppointments, appointment.toMap(), conflictAlgorithm:  ConflictAlgorithm.replace);
+    }
+
+    print('Dummy data seeded successfully');
   }
 
   Database get database {
