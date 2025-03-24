@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pva/core/extension/context_ext.dart';
 
 class WeeklyCalendarWidget extends StatefulWidget {
   final Function(DateTime) onDateSelected;
@@ -47,11 +48,10 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
     super.dispose();
   }
 
-  // Generate 7 dates for a week starting from the given date
-  List<DateTime> _generateWeekDates(DateTime startDate) {
-    // Find the previous Sunday (or the current day if it's Sunday)
+  // Generate dates based on device size
+  List<DateTime> _generateDates(DateTime startDate, int daysToShow) {
     final firstDayOfWeek = startDate.subtract(Duration(days: startDate.weekday % 7));
-    return List.generate(7, (index) => firstDayOfWeek.add(Duration(days: index)));
+    return List.generate(daysToShow, (index) => firstDayOfWeek.add(Duration(days: index)));
   }
 
   void _onPageChanged(int page) {
@@ -62,23 +62,36 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
       _currentPage = page;
     });
 
+    // Get the number of days to show based on screen size
+    final daysToShow = _getDaysToShow(context);
+
     // Update the selected date when page changes
-    final newStartDate = _today.add(Duration(days: page * 7));
+    final newStartDate = _today.add(Duration(days: page * daysToShow));
     widget.onDateSelected(newStartDate);
   }
 
-  void _previousWeek() {
+  void _previousPage() {
     _pageController.previousPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
 
-  void _nextWeek() {
+  void _nextPage() {
     _pageController.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+  }
+
+  int _getDaysToShow(BuildContext context) {
+    if (context.isDesktop) {
+      return 14;
+    } else if (context.isTablet) {
+      return 10;
+    } else {
+      return 7;
+    }
   }
 
   Widget _buildDayItem(DateTime date, bool isSelected) {
@@ -133,7 +146,7 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
                     date.day.toString(),
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight:FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                       color: isSelected
                           ? Colors.white
                           : (isToday ? Theme.of(context).primaryColor : Colors.black87),
@@ -150,6 +163,9 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
 
   @override
   Widget build(BuildContext context) {
+    // Get the number of days to show based on screen size
+    final daysToShow = _getDaysToShow(context);
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -172,15 +188,7 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
                 // Month and year
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child: Text(
-                    DateFormat('MMMM yyyy').format(
-                      _today.add(Duration(days: _currentPage * 7)),
-                    ),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: _buildDateRangeText(daysToShow),
                 ),
 
                 // Navigation buttons
@@ -188,15 +196,15 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
                   children: [
                     IconButton(
                       icon: const Icon(Icons.chevron_left, size: 28),
-                      onPressed: _previousWeek,
+                      onPressed: _previousPage,
                       splashRadius: 24,
-                      tooltip: 'Previous week',
+                      tooltip: 'Previous period',
                     ),
                     IconButton(
                       icon: const Icon(Icons.chevron_right, size: 28),
-                      onPressed: _nextWeek,
+                      onPressed: _nextPage,
                       splashRadius: 24,
-                      tooltip: 'Next week',
+                      tooltip: 'Next period',
                     ),
                   ],
                 ),
@@ -212,23 +220,39 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
               onPageChanged: _onPageChanged,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, page) {
-                final startDate = _today.add(Duration(days: page * 7));
-                final weekDates = _generateWeekDates(startDate);
+                final startDate = _today.add(Duration(days: page * daysToShow));
+                final dates = _generateDates(startDate, daysToShow);
 
                 return FadeTransition(
                   opacity: _fadeAnimation,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: weekDates.map((date) {
-                        // Check if this date is selected
-                        final isSelected = date.day == widget.selectedDate.day &&
-                            date.month == widget.selectedDate.month &&
-                            date.year == widget.selectedDate.year;
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: dates.map((date) {
+                              // Check if this date is selected
+                              final isSelected = date.day == widget.selectedDate.day &&
+                                  date.month == widget.selectedDate.month &&
+                                  date.year == widget.selectedDate.year;
 
-                        return _buildDayItem(date, isSelected);
-                      }).toList(),
+                              // For smaller screens, use a scrollable row of fixed-width items
+                              if (constraints.maxWidth < 700) {
+                                return Container(
+                                  width: constraints.maxWidth / 7,
+                                  child: _buildDayItem(date, isSelected),
+                                );
+                              } else {
+                                // On larger screens, use expanded items
+                                return _buildDayItem(date, isSelected);
+                              }
+                            }).toList(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 );
@@ -240,5 +264,30 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
         ],
       ),
     );
+  }
+
+  Widget _buildDateRangeText(int daysToShow) {
+    final startDate = _today.add(Duration(days: _currentPage * daysToShow));
+    final endDate = startDate.add(Duration(days: daysToShow - 1));
+
+    // If the range spans multiple months
+    if (startDate.month != endDate.month || startDate.year != endDate.year) {
+      return Text(
+        "${DateFormat('MMM d').format(startDate)} - ${DateFormat('MMM d, yyyy').format(endDate)}",
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      // If the range is within the same month
+      return Text(
+        DateFormat('MMMM yyyy').format(startDate),
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
   }
 }

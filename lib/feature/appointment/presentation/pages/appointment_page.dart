@@ -8,8 +8,7 @@ import '../bloc/appointment_state.dart';
 import '../bloc/appoitment_bloc.dart';
 import '../bloc/appoitment_event.dart';
 import '../widgets/appointment_card.dart';
-import '../widgets/enhanced_appointment_card.dart';
-import '../widgets/enhanced_weekly_calender.dart';
+import '../widgets/weekly_calender.dart';
 
 class AppointmentPage extends StatelessWidget {
   const AppointmentPage({Key? key}) : super(key: key);
