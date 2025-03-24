@@ -7,17 +7,21 @@ import '../../domain/repository/chat_repository.dart';
 import '../bloc/chat/chat_bloc.dart';
 import '../bloc/chat/chat_event.dart';
 import '../bloc/chat/chat_state.dart';
-import '../widgets/message_bubble.dart';
-import '../widgets/message_input.dart';
+import '../widgets/chat_bubble.dart';
+import '../widgets/chat_input_field.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
+  final String doctorName;
+  final String specialty;
   final VoidCallback? onBack;
   final bool showAppBar;
 
   const ChatScreen({
     super.key,
     required this.chatId,
+    required this.doctorName,
+    required this.specialty,
     this.onBack,
     this.showAppBar = true,
   });
@@ -39,7 +43,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void didUpdateWidget(ChatScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // If chatId changed, reload messages
     if (oldWidget.chatId != widget.chatId) {
       _chatBloc.add(LoadMessages(widget.chatId));
     }
@@ -64,6 +67,14 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  String _getDoctorName(String chatId) {
+    return "Dr. Sarah Wilson";
+  }
+
+  String _getDoctorSpecialty(String chatId) {
+    return "Cardiologist";
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -81,20 +92,23 @@ class _ChatScreenState extends State<ChatScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               final messages = snapshot.data!;
-
-                              // Scroll to the bottom when new messages are added
                               _scrollToBottom();
-
                               return messages.isEmpty
                                   ? const Center(child: Text('No messages yet. Start a conversation!'))
-                                  : ListView.builder(
-                                controller: _scrollController,
-                                padding: const EdgeInsets.all(16),
-                                itemCount: messages.length,
-                                itemBuilder: (context, index) {
-                                  final message = messages[index];
-                                  return MessageBubble(message: message);
-                                },
+                                  : Container(
+                                color: const Color(0xFFF5F8FA),
+                                child: ListView.builder(
+                                  controller: _scrollController,
+                                  padding: const EdgeInsets.all(16),
+                                  itemCount: messages.length,
+                                  itemBuilder: (context, index) {
+                                    final message = messages[index];
+                                    return ChatMessageBubble(
+                                      message: message,
+                                      showAvatar: message.senderId == '1',
+                                    );
+                                  },
+                                ),
                               );
                             } else if (snapshot.hasError) {
                               return Center(child: Text('Error: ${snapshot.error}'));
@@ -109,18 +123,89 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                   ),
                 ),
-                const MessageInput(),
+                ChatInputField(onSend: (text) {
+                  final message = Message(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    senderId: '1',
+                    content: text,
+                    timestamp: DateTime.now(),
+                    status: MessageStatus.sent, chatId: widget.chatId,
+                  );
+                  context.read<ChatBloc>().add(SendMessage(message));
+                }),
               ],
             );
 
             if (widget.showAppBar) {
               return Scaffold(
+                backgroundColor: Colors.white,
                 appBar: AppBar(
-                  title: Text('Chat ${widget.chatId}'),
-                  leading: widget.onBack != null ? IconButton(
-                    icon: const Icon(Icons.arrow_back),
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  leading: widget.onBack != null
+                      ? IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.black87),
                     onPressed: widget.onBack,
-                  ) : null,
+                  )
+                      : null,
+                  titleSpacing: 0,
+                  title: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Colors.green[100],
+                        child: Text(
+                          widget.doctorName.split(' ').map((e) => e[0]).take(2).join(),
+                          style: TextStyle(
+                            color: Colors.green[900],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(child:
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Dr. ${widget.doctorName}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          Text(
+                            widget.specialty,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      )
+                    ],
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.phone_outlined, color: Colors.black87),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.videocam_outlined, color: Colors.black87),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.more_vert, color: Colors.black87),
+                      onPressed: () {},
+                    ),
+                  ],
                 ),
                 body: body,
               );

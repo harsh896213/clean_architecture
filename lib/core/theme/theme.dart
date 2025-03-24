@@ -5,11 +5,6 @@ import 'package:pva/core/theme/app_pallete.dart';
 class AppTheme {
   //border of TextFormField
   static _border([Color color = AppPallete.borderColor]) => OutlineInputBorder(
-        borderSide: BorderSide(
-          color: color,
-          width: 3,
-        ),
-        borderRadius: BorderRadius.circular(10),
       );
   //Dark Theme
   static final darkThemeMode = ThemeData.dark().copyWith(
@@ -30,6 +25,16 @@ class AppTheme {
       focusedBorder: _border(AppPallete.gradient2),
       errorBorder: _border(AppPallete.errorColor),
     ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppPallete.primaryBlue,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+        ),
+      )
   );
 
   //Light Theme
@@ -37,13 +42,17 @@ class AppTheme {
     primaryColor: AppPallete.primaryBlue,
     scaffoldBackgroundColor: AppPallete.backgroundColorLight,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppPallete.backgroundColorLight,
+        backgroundColor: AppPallete.backgroundColorLight,
+        foregroundColor: AppPallete.textColorLight,
+        titleTextStyle: TextStyle(
+          color: AppPallete.textColorLight,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        )
     ),
-    chipTheme: const ChipThemeData(
-      color: WidgetStatePropertyAll(
-        AppPallete.backgroundColorLight,
-      ),
-      side: BorderSide.none,
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: AppPallete.textColorLight),
+      bodyMedium: TextStyle(color: AppPallete.textSecondaryLight),
     ),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.all(27),
@@ -52,10 +61,43 @@ class AppTheme {
       focusedBorder: _border(AppPallete.gradient2),
       errorBorder: _border(AppPallete.errorColor),
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppPallete.primaryBlue,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
+    ),
+    chipTheme: const ChipThemeData(
+      color: WidgetStatePropertyAll(
+        AppPallete.backgroundColorLight,
+      ),
+      side: BorderSide.none,
+    ),
   );
-}
 
-////bottom nav shadow
+  static InputDecoration searchInputDecoration() {
+    return const InputDecoration(
+      hintText: 'Search conversations',
+      hintStyle: TextStyle(
+        color: AppPallete.searchBarTextColor,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      ),
+      contentPadding: EdgeInsets.only(bottom: 2),
+    );
+  }
+
+  static BoxDecoration searchBarDecoration() {
+    return BoxDecoration(
+      color: AppPallete.searchBarBackground,
+      borderRadius: BorderRadius.circular(20),
+    );
+  }
+}
 
 bool isShadow = true;
 List<BoxShadow> shadow = [

@@ -18,6 +18,8 @@ class MasterDetailChatPage extends StatefulWidget {
 
 class _MasterDetailChatPageState extends State<MasterDetailChatPage> {
   String? selectedChatId;
+  String? selectedDoctorName;
+  String? selectedSpecialty;
   bool _isInDetailView = false;
   ChatBloc? _chatBloc;
 
@@ -25,9 +27,10 @@ class _MasterDetailChatPageState extends State<MasterDetailChatPage> {
   void initState() {
     super.initState();
     _chatBloc = ChatBloc(getIt<ChatRepository>());
+    _chatBloc?.add(LoadChats());
   }
 
-  void _onChatClick(String chatId) {
+  void _onChatClick(String chatId, String doctorName, String speciality) {
     setState(() {
       selectedChatId = chatId;
       _chatBloc?.add(LoadMessages(chatId));
@@ -42,15 +45,14 @@ class _MasterDetailChatPageState extends State<MasterDetailChatPage> {
         MaterialPageRoute(
           builder: (context) => ChatScreen(
             chatId: chatId,
+            doctorName: doctorName,
+            specialty: speciality,
             onBack: () {
-              setState(() {
-                _isInDetailView = false;
-              });
+              Navigator.pop(context);
             },
           ),
         ),
       ).then((_) {
-        // When returning from the chat screen
         setState(() {
           _isInDetailView = false;
         });
@@ -61,53 +63,71 @@ class _MasterDetailChatPageState extends State<MasterDetailChatPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-        value: _chatBloc!,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Chats'),
-            automaticallyImplyLeading: false,
+      value: _chatBloc!,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Messages',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-          body: Row(
-            children: [
-              // Left panel - Chat list
-              if (!context.isMobile || !_isInDetailView)
-                Expanded(
-                  flex: 2,
-                  child: ChatListScreen(
-                    onChatClick: _onChatClick,
-                    selectedChatId: selectedChatId,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+        ),
+        body: Row(
+          children: [
+            // Left panel - Chat list
+            if (!context.isMobile || !_isInDetailView)
+              Expanded(
+                flex: 1,
+                child: ChatListScreen(
+                  onChatClick: _onChatClick,
+                  selectedChatId: selectedChatId,
+                ),
+              ),
+
+            // Add divider between panels on tablet/desktop
+            if ((context.isTablet || context.isDesktop) &&
+                selectedChatId != null)
+              const VerticalDivider(width: 1, thickness: 1, color: Color(0xFFE0E0E0)),
+
+            // Right panel - Chat detail
+            if ((context.isTablet || context.isDesktop))
+              Expanded(
+                flex: 2,
+                child: selectedChatId != null
+                    ? ChatScreen(
+                  key: ValueKey(selectedChatId),
+                  chatId: selectedChatId!,
+                  doctorName: selectedDoctorName!,
+                  specialty: selectedSpecialty!,
+                  onBack: () {
+                    setState(() {
+                      selectedChatId = null;
+                      selectedDoctorName = null;
+                      selectedSpecialty = null;
+                    });
+                  },
+                  showAppBar: true,
+                )
+                    : Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: const Center(
+                    child: Text(
+                      'Select a chat to start conversation',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
-
-              // Add divider between panels on tablet/desktop
-              if ((context.isTablet || context.isDesktop) &&
-                  selectedChatId != null)
-                const VerticalDivider(width: 1, thickness: 1),
-
-              // Right panel - Chat detail
-              if ((context.isTablet || context.isDesktop))
-                Expanded(
-                  flex: 3,
-                  child: selectedChatId != null
-                      ? ChatScreen(
-                          key: ValueKey(
-                              selectedChatId), // Add key to force rebuild
-                          chatId: selectedChatId!,
-                          showAppBar: false,
-                        )
-                      : Container(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          child: const Center(
-                            child: Text(
-                              'Select a chat to start conversation',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                ),
-            ],
-          ),
-        ));
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -116,3 +136,4 @@ class _MasterDetailChatPageState extends State<MasterDetailChatPage> {
     super.dispose();
   }
 }
+

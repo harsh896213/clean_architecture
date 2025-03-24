@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class EnhancedWeeklyCalendarWidget extends StatefulWidget {
+class WeeklyCalendarWidget extends StatefulWidget {
   final Function(DateTime) onDateSelected;
   final DateTime selectedDate;
 
-  const EnhancedWeeklyCalendarWidget({
+  const WeeklyCalendarWidget({
     Key? key,
     required this.onDateSelected,
     required this.selectedDate,
   }) : super(key: key);
 
   @override
-  _EnhancedWeeklyCalendarWidgetState createState() => _EnhancedWeeklyCalendarWidgetState();
+  _WeeklyCalendarWidgetState createState() => _WeeklyCalendarWidgetState();
 }
 
-class _EnhancedWeeklyCalendarWidgetState extends State<EnhancedWeeklyCalendarWidget> with SingleTickerProviderStateMixin {
+class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late DateTime _today;
   late AnimationController _animationController;
@@ -235,29 +235,7 @@ class _EnhancedWeeklyCalendarWidgetState extends State<EnhancedWeeklyCalendarWid
               },
             ),
           ),
-
-          // Selected date display
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.event_available,
-                  color: Theme.of(context).primaryColor,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Appointments for ${DateFormat('EEEE, MMMM d').format(widget.selectedDate)}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
+          const SizedBox(height: 12),
           const Divider(height: 1),
         ],
       ),
