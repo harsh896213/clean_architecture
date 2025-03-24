@@ -7,6 +7,7 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
     required this.navigationShell,
     required this.children,
     this.drawer,
+    this.appBar,
     this.endDrawer,
     super.key,
   });
@@ -15,21 +16,21 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
   final List<Widget> children;
   final Widget? drawer;
   final Widget? endDrawer;
+  final PreferredSizeWidget? appBar;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-        ),
+        backgroundColor: Colors.white,
+        appBar: appBar,
         drawer: drawer,
         endDrawer: endDrawer,
         body: children[navigationShell.currentIndex],
         bottomNavigationBar: CustomBottomNavBar(
           selectedIndex: navigationShell.currentIndex,
-          onItemTapped: (index) => navigationShell.goBranch(index) ,
+          onItemTapped: (index) => navigationShell.goBranch(index),
         ),
         // bottomNavigationBar: NavigationBar(
         //   selectedIndex: navigationShell.currentIndex,

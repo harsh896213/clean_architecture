@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pva/core/router/approuter.dart';
 import 'package:pva/core/theme/app_pallete.dart';
-
+import 'package:pva/core/theme/text_styles.dart';
 
 class AppTheme {
-  //border of TextFormField
   static _border([Color color = AppPallete.borderColor]) => OutlineInputBorder(
         borderSide: BorderSide(
           color: color,
@@ -11,9 +11,10 @@ class AppTheme {
         ),
         borderRadius: BorderRadius.circular(10),
       );
-  //Dark Theme
+
   static final darkThemeMode = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: AppPallete.backgroundColorDark,
+    textTheme: AppTextStyles.textTheme,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppPallete.backgroundColorDark,
     ),
@@ -32,9 +33,9 @@ class AppTheme {
     ),
   );
 
-  //Light Theme
   static final lightThemeMode = ThemeData.light().copyWith(
     scaffoldBackgroundColor: AppPallete.backgroundColorLight,
+    textTheme: AppTextStyles.textTheme,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppPallete.backgroundColorLight,
     ),

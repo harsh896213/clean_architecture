@@ -7,7 +7,6 @@ import 'package:pva/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:pva/feature/auth/presentation/widgets/auth_field.dart';
 import 'package:pva/feature/auth/presentation/widgets/auth_gradient_button.dart';
 
-import '../../../splash/bloc/test_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
 
