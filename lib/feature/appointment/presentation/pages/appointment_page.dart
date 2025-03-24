@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/di/get_it.dart';
-import '../../../../core/theme/app_pallete.dart';
 import '../bloc/appointment_state.dart';
 import '../bloc/appoitment_bloc.dart';
 import '../bloc/appoitment_event.dart';
@@ -37,8 +36,7 @@ class AppointmentPageContentState extends State<AppointmentPageContent> {
     super.initState();
     _selectedDate = DateTime.now();
     Future.microtask(() =>
-        context.read<AppointmentBloc>().add(FetchAppointments(_selectedDate))
-    );
+        context.read<AppointmentBloc>().add(FetchAppointments(_selectedDate)));
   }
 
   void _onDateSelected(DateTime date) {
@@ -70,7 +68,6 @@ class AppointmentPageContentState extends State<AppointmentPageContent> {
               onDateSelected: _onDateSelected,
               selectedDate: _selectedDate,
             ),
-
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 16.0),
               child: Text(
@@ -81,7 +78,6 @@ class AppointmentPageContentState extends State<AppointmentPageContent> {
                 ),
               ),
             ),
-
             Expanded(
               child: _buildAppointmentsList(),
             ),
@@ -138,7 +134,8 @@ class AppointmentPageContentState extends State<AppointmentPageContent> {
                     icon: const Icon(Icons.add),
                     label: const Text('Book an Appointment'),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
                       backgroundColor: const Color(0xFF4285F4),
                     ),
                   ),
@@ -153,13 +150,14 @@ class AppointmentPageContentState extends State<AppointmentPageContent> {
               itemCount: appointments.length,
               itemBuilder: (context, index) {
                 final appointment = appointments[index];
-                final appointmentTime = DateFormat('h:mm a').format(appointment.dateTime);
+                final appointmentTime =
+                    DateFormat('h:mm a').format(appointment.dateTime);
 
                 // Determine button properties based on appointment type
                 final isVirtual = appointment.isVirtual == 1;
                 final buttonText = isVirtual ? 'Join Call' : 'Get Directions';
                 final buttonColor = isVirtual
-                    ? const Color(0xFF4285F4)  // Blue for virtual
+                    ? const Color(0xFF4285F4) // Blue for virtual
                     : const Color(0xFFF9A825); // Orange for in-person
 
                 return Padding(
@@ -190,5 +188,5 @@ class AppointmentPageContentState extends State<AppointmentPageContent> {
         }
       },
     );
-  }}
-
+  }
+}

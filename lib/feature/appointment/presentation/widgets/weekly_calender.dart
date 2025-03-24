@@ -7,10 +7,10 @@ class WeeklyCalendarWidget extends StatefulWidget {
   final DateTime selectedDate;
 
   const WeeklyCalendarWidget({
-    Key? key,
+    super.key,
     required this.onDateSelected,
     required this.selectedDate,
-  }) : super(key: key);
+  });
 
   @override
   _WeeklyCalendarWidgetState createState() => _WeeklyCalendarWidgetState();
@@ -94,14 +94,15 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
     }
   }
 
-  Widget _buildDayItem(DateTime date, bool isSelected) {
+  Widget _buildDayItem(DateTime date, bool isSelected, double itemWidth) {
     // Day of week abbreviation
     final dayOfWeek = DateFormat('EEE').format(date).toUpperCase();
     final isToday = date.day == DateTime.now().day &&
         date.month == DateTime.now().month &&
         date.year == DateTime.now().year;
 
-    return Expanded(
+    return Container(
+      width: itemWidth,
       child: GestureDetector(
         onTap: () {
           widget.onDateSelected(date);
@@ -225,35 +226,26 @@ class _WeeklyCalendarWidgetState extends State<WeeklyCalendarWidget> with Single
 
                 return FadeTransition(
                   opacity: _fadeAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: dates.map((date) {
-                              // Check if this date is selected
-                              final isSelected = date.day == widget.selectedDate.day &&
-                                  date.month == widget.selectedDate.month &&
-                                  date.year == widget.selectedDate.year;
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final itemWidth = constraints.maxWidth / (constraints.maxWidth < 700 ? 7 : daysToShow);
 
-                              // For smaller screens, use a scrollable row of fixed-width items
-                              if (constraints.maxWidth < 700) {
-                                return Container(
-                                  width: constraints.maxWidth / 7,
-                                  child: _buildDayItem(date, isSelected),
-                                );
-                              } else {
-                                // On larger screens, use expanded items
-                                return _buildDayItem(date, isSelected);
-                              }
-                            }).toList(),
-                          ),
-                        );
-                      },
-                    ),
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: constraints.maxWidth < 700 ? const ClampingScrollPhysics() : const NeverScrollableScrollPhysics(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: dates.map((date) {
+                            // Check if this date is selected
+                            final isSelected = date.day == widget.selectedDate.day &&
+                                date.month == widget.selectedDate.month &&
+                                date.year == widget.selectedDate.year;
+
+                            return _buildDayItem(date, isSelected, itemWidth);
+                          }).toList(),
+                        ),
+                      );
+                    },
                   ),
                 );
               },

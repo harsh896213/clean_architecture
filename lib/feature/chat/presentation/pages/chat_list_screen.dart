@@ -2,10 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pva/feature/chat/data/models/chat_with_participants.dart';
 
 import '../../../../core/di/get_it.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/theme.dart';
+import '../../data/models/chat.dart';
 import '../../domain/repository/chat_repository.dart';
 import '../bloc/chat/chat_bloc.dart';
 import '../bloc/chat/chat_event.dart';
@@ -15,8 +17,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChatListScreen extends StatelessWidget {
-  final Function(String, String, String) onChatClick;  // Updated to pass more data
+class ChatListScreen extends StatefulWidget {
+  final Function(String, String, String) onChatClick;
   final String? selectedChatId;
 
   const ChatListScreen({
@@ -24,6 +26,20 @@ class ChatListScreen extends StatelessWidget {
     required this.onChatClick,
     this.selectedChatId,
   });
+
+  @override
+  State<ChatListScreen> createState() => _ChatListScreenState();
+}
+
+class _ChatListScreenState extends State<ChatListScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +63,38 @@ class ChatListScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: TextField(
-                      decoration: AppTheme.searchInputDecoration(),
+                      controller: _searchController,
+                      decoration: AppTheme.searchInputDecoration().copyWith(
+                        hintText: 'Search doctors...',
+                      ),
                       style: const TextStyle(
                         fontSize: 16,
                         color: AppPallete.searchBarTextColor,
                       ),
                       onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value.toLowerCase();
+                        });
                       },
                     ),
                   ),
+                  if (_searchQuery.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _searchQuery = '';
+                          _searchController.clear();
+                        });
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Icon(
+                          Icons.clear,
+                          color: AppPallete.searchBarIconColor,
+                          size: 20,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -67,11 +106,36 @@ class ChatListScreen extends StatelessWidget {
                 if (state is ChatLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is ChatsLoaded) {
+                  final filteredChats = _filterChats(state.chats);
+
+                  if (filteredChats.isEmpty && _searchQuery.isNotEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.search_off,
+                            size: 48,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No doctors found matching "$_searchQuery"',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
                   return ListView.builder(
-                    itemCount: state.chats.length,
+                    itemCount: filteredChats.length,
                     itemBuilder: (context, index) {
-                      final chat = state.chats[index];
-                      final isSelected = chat.id == selectedChatId;
+                      final chat = filteredChats[index];
+                      final isSelected = chat.id == widget.selectedChatId;
 
                       String doctorName = getDoctorName(chat.id);
                       String messagePreview = chat.lastMessage ?? 'No messages yet';
@@ -80,7 +144,7 @@ class ChatListScreen extends StatelessWidget {
 
                       return InkWell(
                         onTap: () {
-                          onChatClick(chat.id, doctorName, specialty);
+                          widget.onChatClick(chat.id, doctorName, specialty);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -238,6 +302,22 @@ class ChatListScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  List<ChatWithParticipants> _filterChats(List<ChatWithParticipants> chats) {
+    if (_searchQuery.isEmpty) {
+      return chats;
+    }
+
+    return chats.where((chat) {
+      final doctorName = getDoctorName(chat.id).toLowerCase();
+      final specialty = getSpecialtyFromChatId(chat.id).toLowerCase();
+      final messagePreview = (chat.lastMessage ?? '').toLowerCase();
+
+      return doctorName.contains(_searchQuery) ||
+          specialty.contains(_searchQuery) ||
+          messagePreview.contains(_searchQuery);
+    }).toList();
   }
 
   String getDoctorName(String chatId) {

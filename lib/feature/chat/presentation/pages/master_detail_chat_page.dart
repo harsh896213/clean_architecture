@@ -33,6 +33,8 @@ class _MasterDetailChatPageState extends State<MasterDetailChatPage> {
   void _onChatClick(String chatId, String doctorName, String speciality) {
     setState(() {
       selectedChatId = chatId;
+      selectedDoctorName = doctorName;  // Set the doctor name
+      selectedSpecialty = speciality;    // Set the specialty
       _chatBloc?.add(LoadMessages(chatId));
     });
 
@@ -99,7 +101,7 @@ class _MasterDetailChatPageState extends State<MasterDetailChatPage> {
             if ((context.isTablet || context.isDesktop))
               Expanded(
                 flex: 2,
-                child: selectedChatId != null
+                child: selectedChatId != null && selectedDoctorName != null && selectedSpecialty != null
                     ? ChatScreen(
                   key: ValueKey(selectedChatId),
                   chatId: selectedChatId!,
