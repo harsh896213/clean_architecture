@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/image_path/image_path.dart';
 import 'package:pva/core/theme/shadow.dart';
+import 'package:pva/core/widgets/svg_button_container.dart';
 import 'package:pva/feature/home/domain/entity/activity.dart';
+import 'package:pva/feature/home/presentation/widget/icon_btn.dart';
 
 class ActivityCard extends StatelessWidget {
   final Activity activity;
@@ -35,7 +40,12 @@ class ActivityCard extends StatelessWidget {
               decoration: ShapeDecoration(
                   color: _getActivityColor(activity.type),
                   shape: CircleBorder()),
-              child: Icon(_getIcons(activity.type), size: 17,),
+              child: SvgButtonContainer(
+                svgPath: _getSvgPath(activity.type),
+                padding: 12,
+                size: 24,
+                color: _getActivityColor(activity.type),
+              ),
             ),
             Expanded(
               child: Column(
@@ -52,9 +62,8 @@ class ActivityCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       spacing: 8,
                       children: [
-                      Icon(_getIcons(activity.type), size: 10, color: Colors.red,),
+                        SvgPicture.asset(_getSvgPath(activity.type), width: 24, color: Colors.red,),
                       Text("Medication")
-
                     ],),
                   ),
                   Text(
@@ -82,23 +91,10 @@ class ActivityCard extends StatelessWidget {
               ),
             ),
             Column(
+              spacing: 10,
               children: [
-                IconButton(
-                  onPressed: activity.isCompleted ? null : onComplete,
-                  icon: Icon(
-                    Icons.check_circle,
-                    color:  Colors.green,
-                    size: 35,
-                  ),
-                ),
-                IconButton(
-                  onPressed: activity.isCompleted ? null : onComplete,
-                  icon: Icon(
-                    Icons.cancel,
-                    color: Colors.black26,
-                    size: 35,
-                  ),
-                ),
+                IconContainer(icon: Icons.check, color: context.theme.primaryColor, padding: 10),
+                SvgButtonContainer(svgPath: ImagePath.cancel, color: Colors.grey, size: 20, padding: 10,)
               ],
             ),
           ],
@@ -106,6 +102,8 @@ class ActivityCard extends StatelessWidget {
       ),
     );
   }
+
+
 
   Color _getActivityColor(ActivityType type) {
     switch (type) {
@@ -119,21 +117,25 @@ class ActivityCard extends StatelessWidget {
         return Colors.orange;
       case ActivityType.other:
         return Colors.grey;
+      case ActivityType.survey:
+        return Colors.red;
     }
   }
 
-  IconData _getIcons(ActivityType type) {
+  String _getSvgPath(ActivityType type) {
     switch (type) {
       case ActivityType.exercise:
-        return Icons.sports_gymnastics;
+        return ImagePath.dumble;
       case ActivityType.medication:
-        return Icons.medical_information_outlined;
+        return ImagePath.medication;
       case ActivityType.appointment:
-        return Icons.perm_identity;
+        return ImagePath.appointment;
       case ActivityType.therapy:
-        return Icons.theater_comedy;
+        return ImagePath.surveyEdit;
+      case ActivityType.survey:
+        return ImagePath.surveyEdit;
       case ActivityType.other:
-        return Icons.devices_other;
+        return ImagePath.bellIcon;
     }
   }
 

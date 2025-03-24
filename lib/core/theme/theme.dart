@@ -34,6 +34,8 @@ class AppTheme {
   );
 
   static final lightThemeMode = ThemeData.light().copyWith(
+    primaryColor: AppPallete.primaryColor,
+    secondaryHeaderColor: AppPallete.secondaryColor,
     scaffoldBackgroundColor: AppPallete.backgroundColorLight,
     textTheme: AppTextStyles.textTheme,
     appBarTheme: const AppBarTheme(

@@ -61,6 +61,7 @@ enum ActivityType {
   medication,
   appointment,
   therapy,
+  survey,
   other;
 
   String get displayName {
@@ -73,6 +74,8 @@ enum ActivityType {
         return 'Appointment';
       case ActivityType.therapy:
         return 'Therapy';
+      case ActivityType.survey:
+        return 'Survey';
       case ActivityType.other:
         return 'Other';
     }
