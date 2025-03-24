@@ -28,7 +28,7 @@ class DrawerRemoteDataSourceImpl implements DrawerRemoteDataSource {
       //     await rootBundle.loadString('lib/core/mock/drawer_config.json');
       final config = DrawerConfigModel.fromJson({
         "showDrawer": true,
-        "showEndDrawer": true,
+        "showEndDrawer": false,
         "drawerItems": [
           {
             "title": "Profile",

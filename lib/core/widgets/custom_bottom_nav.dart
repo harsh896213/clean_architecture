@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -21,7 +20,9 @@ class CustomBottomNavBar extends StatelessWidget {
           height: 70,
           decoration: BoxDecoration(
             color: Colors.white,
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2)],
+            boxShadow: [
+              BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2)
+            ],
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25),
               topRight: Radius.circular(25),
@@ -30,11 +31,11 @@ class CustomBottomNavBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(Icons.home, 0),
-              _buildNavItem(Icons.mediation, 1),
-               SizedBox(width: 150), // Space for the Lottie button
-              _buildNavItem(Icons.chat, 3),
-              _buildNavItem(Icons.person, 4),
+              _buildNavItem(Icons.home, 0, "Home"),
+              _buildNavItem(Icons.calendar_month, 1, "Appointment"),
+              SizedBox(width: 50), // Space for the Lottie button
+              _buildNavItem(Icons.chat, 3, "Appointment"),
+              _buildNavItem(Icons.local_library_sharp, 4, "Library"),
             ],
           ),
         ),
@@ -43,19 +44,16 @@ class CustomBottomNavBar extends StatelessWidget {
           left: MediaQuery.of(context).size.width / 2 - 75,
           child: GestureDetector(
             // onTap: () => onItemTapped(2),
-            onTap:() => context.push("/assistant"),
+            onTap: () => context.push("/assistant"),
             child: Hero(
               tag: "heroTag",
               child: SizedBox(
-                height: 150,
-                width: 150,
-                child: Lottie.asset(
-                  'assets/lottie/ai_assistant.json', // Your Lottie animation file
-                  fit: BoxFit.fill,
-                  repeat: true,
-                  animate: true,
-                ),
-              ),
+                  height: 150,
+                  width: 150,
+                  child: Icon(
+                    Icons.brightness_auto,
+                    size: 60,
+                  )),
             ),
           ),
         ),
@@ -63,10 +61,22 @@ class CustomBottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(IconData icon, int index) {
-    return IconButton(
-      icon: Icon(icon, color: selectedIndex == index ? Colors.blue : Colors.grey, size: 30),
-      onPressed: () => onItemTapped(index),
+  Widget _buildNavItem(IconData icon, int index, String name) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          child: Icon(icon,
+              color: selectedIndex == index ? Colors.blue : Colors.grey,
+              size: 30),
+          onTap: () => onItemTapped(index),
+        ),
+        Text(
+          name,
+          style: TextStyle(
+              color: selectedIndex == index ? Colors.blue : Colors.grey),
+        )
+      ],
     );
   }
 }

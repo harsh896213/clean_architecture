@@ -31,6 +31,7 @@ abstract class ButtonFactory {
   Widget createIconButton({
     required IconData icon,
     required VoidCallback onPressed,
+    required double iconSize,
   });
 
   factory ButtonFactory() {

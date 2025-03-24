@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 extension DateTimeExtension on DateTime {
   String get toYMD => '$year-${_twoDigits(month)}-${_twoDigits(day)}';
   String get toHMS =>
@@ -15,7 +17,7 @@ extension DateTimeExtension on DateTime {
   bool isSameYear(DateTime other) => year == other.year;
 
   bool get isToday => isSameDay(DateTime.now());
-  bool get isYesterday =>
+  bool get isYestierday =>
       isSameDay(DateTime.now().subtract(const Duration(days: 1)));
   bool get isTomorrow => isSameDay(DateTime.now().add(const Duration(days: 1)));
 
@@ -34,10 +36,16 @@ extension DateTimeExtension on DateTime {
   DateTime addMonths(int months) =>
       DateTime(year, month + months, day, hour, minute, second);
   DateTime addWeeks(int weeks) => add(Duration(days: weeks * 7));
+  DateTime addDays(int days) => add(Duration(days: days));
+  DateTime get previousDay => subtract(const Duration(days: 1));
+  DateTime get nextDay => add(const Duration(days: 1));
+
 
   int get minutesFromNow => difference(DateTime.now()).inMinutes;
   int get hoursFromNow => difference(DateTime.now()).inHours;
   int get daysFromNow => difference(DateTime.now()).inDays;
+
+  String get getMonthDate => DateFormat.MMMd().format(this);
 
   // Relative time
   String get timeAgo {

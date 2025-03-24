@@ -16,6 +16,16 @@ import 'package:pva/feature/drawer/domain/repositories/drawer_repository.dart';
 import 'package:pva/feature/drawer/domain/usecases/get_drawer_config.dart';
 import 'package:pva/feature/drawer/presentation/bloc/drawer_bloc.dart';
 import 'package:pva/feature/drawer/presentation/bloc/drawer_event.dart';
+import 'package:pva/feature/home/data/repositries/home_repository_impl.dart';
+import 'package:pva/feature/home/domain/repositories/home_repositories.dart';
+import 'package:pva/feature/home/domain/usecases/activities.dart';
+import 'package:pva/feature/home/domain/usecases/tipsofday.dart';
+import 'package:pva/feature/home/presentation/bloc/home_bloc.dart';
+import 'package:pva/feature/library%20/data/datasources/library_datasource.dart';
+import 'package:pva/feature/library%20/data/repositories/library_repository_impl.dart';
+import 'package:pva/feature/library%20/domain/repository/library_repository.dart';
+import 'package:pva/feature/library%20/domain/usecases/library_usecase.dart';
+import 'package:pva/feature/library%20/presentation/bloc/library_bloc.dart';
 
 import '../../feature/appointment/data/repositories/appointment_repository_impl.dart';
 import '../../feature/appointment/domain/repository/appointment_repository.dart';
@@ -63,33 +73,38 @@ Future<void> setupDependencies() async {
   getIt.registerFactory(
     () => UserSignUp(getIt()),
   );
+
   getIt.registerLazySingleton(
-        () => AuthBloc(
+    () => AuthBloc(
       userSignUp: getIt(),
       userLogin: getIt(),
       appUserCubit: getIt(),
     ),
   );
+
+  await _setupLibrary();
+  await _setupHome();
+
   getIt.registerLazySingleton<DrawerRemoteDataSource>(
-        () => DrawerRemoteDataSourceImpl(
+    () => DrawerRemoteDataSourceImpl(
       client: getIt(),
       baseUrl: getIt<Dio>().options.baseUrl,
     ),
   );
 
   getIt.registerLazySingleton<DrawerRepository>(
-        () => DrawerRepositoryImpl(
+    () => DrawerRepositoryImpl(
       remoteDataSource: getIt(),
       connectionChecker: getIt(),
     ),
   );
 
   getIt.registerLazySingleton(
-        () => GetDrawerConfig(getIt()),
+    () => GetDrawerConfig(getIt()),
   );
 
   getIt.registerFactory(
-        () => DrawerBloc(getDrawerConfig: getIt())..add(LoadDrawerConfig()),
+    () => DrawerBloc(getDrawerConfig: getIt())..add(LoadDrawerConfig()),
   );
 
   final databaseHelper = DatabaseHelper();
@@ -118,4 +133,26 @@ Future<void> setupDependencies() async {
   getIt.registerFactory<AppointmentBloc>(
           () => AppointmentBloc(repository: getIt()));
 
+}
+
+Future<void> _setupLibrary() async {
+  getIt
+    ..registerLazySingleton<LibraryDataSource>(() => LibraryDataSourceImpl())
+    ..registerLazySingleton<LibraryRepository>(
+        () => LibraryRepositoriesImpl(getIt(), getIt()))
+    ..registerLazySingleton(() => LibraryUseCase(getIt()))
+    ..registerFactoryParam(
+      (context, _) => LibraryBloc(libraryUseCase: getIt()),
+    );
+}
+
+Future<void> _setupHome() async {
+  getIt
+    ..registerLazySingleton<HomeRepositories>(
+        () => HomeRepositoriesImpl())
+    ..registerLazySingleton(() => Activities( homeRepositories: getIt()))
+    ..registerLazySingleton(() => TipsOfDay( homeRepositories: getIt()))
+    ..registerFactoryParam(
+      (context, _) => HomeBloc( tipsOfDay: getIt(), activities: getIt()),
+    );
 }
