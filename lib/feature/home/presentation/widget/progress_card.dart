@@ -65,7 +65,12 @@ class ProgressCard extends StatelessWidget {
                       }
                     },
                     builder: (context, state) {
-                      return Text(state,maxLines: 5, style: context.textTheme.bodyLarge,);
+                      return Text(
+                        state,
+                        maxLines: 5,
+                        style: context.textTheme.bodyLarge?.copyWith(
+                            color: context.theme.secondaryHeaderColor),
+                      );
                     },
                   ),
 
