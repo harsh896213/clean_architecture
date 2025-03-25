@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/image_path/image_path.dart';
+import 'package:pva/core/theme/app_pallete.dart';
+import 'package:pva/core/theme/shadow.dart';
+import 'package:pva/core/widgets/svg_button_container.dart';
 
 class LibraryExpansionTile extends StatelessWidget {
   final String title;
@@ -17,42 +22,26 @@ class LibraryExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.black12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            offset: const Offset(8, -2),
-            blurRadius: 8,
-            spreadRadius: 0,
-          ),
-        ],
+        boxShadow: cardShadow
       ),
       child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent,
-        ),
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           key: ValueKey(isExpanded),
+          tilePadding: EdgeInsets.symmetric(horizontal: 16),
           maintainState: false,
           initiallyExpanded: isExpanded,
           onExpansionChanged: onExpansionChanged,
-          leading: Container(
-            width: 60,
-            height: 60,
-            decoration: const ShapeDecoration(
-              color: Color(0xFFEEF2F5),
-              shape: CircleBorder(),
-            ),
-            child: const Icon(
-              Icons.question_mark_outlined,
-              size: 20,
-              color: Colors.blue,
-            ),
-          ),
+          leading: SvgButtonContainer(
+              padding: 10,
+              color: AppPallete.iconBg,
+              svgPath: ImagePath.roundedQuestion,
+              size: 24),
           title: Text(
             title,
             style: const TextStyle(
@@ -62,26 +51,15 @@ class LibraryExpansionTile extends StatelessWidget {
           ),
           trailing: RotationTransition(
             turns: isExpanded ? const AlwaysStoppedAnimation(0.25) : const AlwaysStoppedAnimation(0),
-            child: const Icon(Icons.arrow_forward_ios_rounded),
+            child: const Icon(Icons.arrow_forward_ios_rounded, size: 20,),
           ),
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Detailed Description',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(detailedDescription),
-                  const SizedBox(height: 16),
-                ],
-              ),
+              padding: const EdgeInsets.only(left: 70,right: 16),
+              child: Text(detailedDescription,
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: Color.fromRGBO(102, 102, 102, 1),
+                  )),
             ),
           ],
         ),

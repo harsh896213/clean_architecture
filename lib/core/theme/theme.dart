@@ -20,7 +20,7 @@ class AppTheme {
     ),
     chipTheme: const ChipThemeData(
       color: WidgetStatePropertyAll(
-        AppPallete.backgroundColorDark,
+          AppPallete.primaryColor,
       ),
       side: BorderSide.none,
     ),
@@ -43,7 +43,7 @@ class AppTheme {
     ),
     chipTheme: const ChipThemeData(
       color: WidgetStatePropertyAll(
-        AppPallete.backgroundColorLight,
+        AppPallete.primaryColor,
       ),
       side: BorderSide.none,
     ),
@@ -55,7 +55,16 @@ class AppTheme {
       errorBorder: _border(AppPallete.errorColor),
     ),
   );
+
+  static ListTileThemeData get listTileTheme => ListTileThemeData(
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    tileColor: AppPallete.primaryColor,
+    selectedTileColor: Colors.grey[100],
+    titleTextStyle: AppTextStyles.getTextStyle(16, FontWeight.w500),
+    subtitleTextStyle: AppTextStyles.getTextStyle(14, FontWeight.w400),
+  );
 }
+
 
 ////bottom nav shadow
 

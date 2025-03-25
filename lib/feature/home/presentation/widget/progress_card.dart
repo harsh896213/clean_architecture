@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/theme/app_pallete.dart';
 import 'package:pva/core/theme/shadow.dart';
 import 'package:pva/core/widgets/animated_progressbar.dart';
 import 'package:pva/core/widgets/divider.dart';
@@ -17,14 +18,15 @@ class ProgressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(20),
       decoration: ShapeDecoration(
           color: Colors.white,
           shadows: cardShadow,
           shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24)
       )),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+      child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -32,11 +34,11 @@ class ProgressCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Care Plan Progress', style: context.textTheme.titleSmall,),
+                  Text('Care Plan Progress',textAlign: TextAlign.center, style: context.textTheme.titleSmall,),
                   const SizedBox(height: 20,),
                   SizedBox(
-                    height: 100,
-                    width: 100,
+                    height: 80,
+                    width: 80,
                     child: AnimatedProgressIndicator(
                       progress: progress,
                     ),
@@ -44,8 +46,13 @@ class ProgressCard extends StatelessWidget {
                 ],
               ),
             ),
-            CustomDivider(height: 130, thickness: 2,),
-            SizedBox(width: 10,),
+            Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Container(
+              width: 1,
+              color: AppPallete.dividerColor,
+            ),
+            ),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -68,9 +75,9 @@ class ProgressCard extends StatelessWidget {
                       return Text(
                         state,
                         maxLines: 5,
-                        style: context.textTheme.bodyLarge?.copyWith(
-                            color: context.theme.secondaryHeaderColor),
-                      );
+                        textAlign: TextAlign.center,
+                        style: context.textTheme.bodyMedium?.copyWith(
+                            color: context.theme.secondaryHeaderColor));
                     },
                   ),
 

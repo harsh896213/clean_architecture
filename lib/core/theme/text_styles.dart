@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pva/core/router/approuter.dart';
 
 class AppTextStyles {
-  static TextStyle _getTextStyle(double fontSize, FontWeight weight) {
+  static TextStyle getTextStyle(double fontSize, FontWeight weight) {
     return TextStyle(
       fontFamily: 'PlusJakartaSans',
       fontWeight: weight,
@@ -15,24 +15,24 @@ class AppTextStyles {
   }
 
   static var textTheme = TextTheme(
-    bodyLarge: _getTextStyle(16, FontWeight.w400),
-    bodyMedium: _getTextStyle(14, FontWeight.w400),
-    bodySmall: _getTextStyle(12, FontWeight.w400),
+    bodyLarge: getTextStyle(16, FontWeight.w400),
+    bodyMedium: getTextStyle(14, FontWeight.w400),
+    bodySmall: getTextStyle(12, FontWeight.w400),
 
     // Medium (w500) with different sizes
-    labelSmall: _getTextStyle(18, FontWeight.w500),
-    labelLarge: _getTextStyle(16, FontWeight.w500),
-    labelMedium: _getTextStyle(14, FontWeight.w500),
+    labelSmall: getTextStyle(18, FontWeight.w500),
+    labelLarge: getTextStyle(16, FontWeight.w500),
+    labelMedium: getTextStyle(14, FontWeight.w500),
 
     // SemiBold (w600) with different sizes
-    titleMedium: _getTextStyle(18, FontWeight.w600),
-    titleLarge: _getTextStyle(22, FontWeight.w600),
-    titleSmall: _getTextStyle(16, FontWeight.w600),
+    titleMedium: getTextStyle(18, FontWeight.w600),
+    titleLarge: getTextStyle(22, FontWeight.w600),
+    titleSmall: getTextStyle(16, FontWeight.w600),
 
     // Bold (w700) with different sizes
-    headlineLarge: _getTextStyle(28, FontWeight.w700),
-    headlineMedium: _getTextStyle(24, FontWeight.w700),
-    headlineSmall: _getTextStyle(20, FontWeight.w700),
+    headlineLarge: getTextStyle(28, FontWeight.w700),
+    headlineMedium: getTextStyle(24, FontWeight.w700),
+    headlineSmall: getTextStyle(20, FontWeight.w700),
 
   );
 }

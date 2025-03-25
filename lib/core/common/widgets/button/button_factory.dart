@@ -32,6 +32,7 @@ abstract class ButtonFactory {
     required IconData icon,
     required VoidCallback onPressed,
     required double iconSize,
+    Color color = Colors.white
   });
 
   factory ButtonFactory() {
