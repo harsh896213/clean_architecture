@@ -16,7 +16,7 @@ class TimeChip extends StatelessWidget {
       },
       child: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(right: 15),
+        margin: EdgeInsets.only(right: 8),
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: ShapeDecoration(
           color: isSelected ? Colors.blueAccent : Colors.transparent,

@@ -19,7 +19,7 @@ class Resources extends StatelessWidget {
       },
       builder: (context, state) {
         return ListView.builder(
-          padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 10),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => RecommendationTile(
             resource: state[index],

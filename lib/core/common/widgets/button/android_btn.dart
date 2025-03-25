@@ -58,11 +58,12 @@ class AndroidButtonFactory implements ButtonFactory {
   Widget createIconButton({
     required IconData icon,
     required VoidCallback onPressed,
-    required double iconSize
+    required double iconSize,
+    Color color = Colors.black,
   }) {
     return IconButton(
       onPressed: onPressed,
-      icon: Icon(icon, size: iconSize,),
+      icon: Icon(icon, size: iconSize, color: color,),
     );
   }
 }

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Blog App',
+      title: 'PVA',
       theme: AppTheme.lightThemeMode,
       routerConfig: goRouter,
     );

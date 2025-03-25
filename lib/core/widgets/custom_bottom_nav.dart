@@ -17,6 +17,7 @@ class CustomBottomNavBar extends StatelessWidget {
       clipBehavior: Clip.none, // Allows the center button to overflow
       children: [
         Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           height: 70,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -73,8 +74,9 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
         Text(
           name,
-          style: TextStyle(
-              color: selectedIndex == index ? Colors.blue : Colors.grey),
+          style:
+          TextStyle(
+              color: selectedIndex == index ? Colors.blue : Colors.grey, fontSize: 12, fontWeight: FontWeight.w500,fontFamily: "PlusJakartaSans"),
         )
       ],
     );

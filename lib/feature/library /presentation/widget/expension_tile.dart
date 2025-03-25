@@ -22,7 +22,6 @@ class FrequentlyAskedQuestion extends StatelessWidget {
         return ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          padding: const EdgeInsets.all(16),
           itemCount: state.length,
           // Replace with your actual count
           itemBuilder: (context, index) {

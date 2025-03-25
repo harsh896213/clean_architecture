@@ -7,7 +7,7 @@ class AppTheme {
   //border of TextFormField
   static _border([Color color = AppPallete.borderColor]) => OutlineInputBorder(
       );
-  //Dark Theme
+
   static final darkThemeMode = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: AppPallete.backgroundColorDark,
     textTheme: AppTextStyles.textTheme,
@@ -16,7 +16,7 @@ class AppTheme {
     ),
     chipTheme: const ChipThemeData(
       color: WidgetStatePropertyAll(
-        AppPallete.backgroundColorDark,
+          AppPallete.primaryColor,
       ),
       side: BorderSide.none,
     ),
@@ -39,7 +39,6 @@ class AppTheme {
       )
   );
 
-  //Light Theme
   static final lightThemeMode = ThemeData.light().copyWith(
     primaryColor: AppPallete.primaryColor,
     secondaryHeaderColor: AppPallete.secondaryColor,
@@ -50,7 +49,7 @@ class AppTheme {
     ),
     chipTheme: const ChipThemeData(
       color: WidgetStatePropertyAll(
-        AppPallete.backgroundColorLight,
+        AppPallete.primaryColor,
       ),
       side: BorderSide.none,
     ),
@@ -84,6 +83,16 @@ class AppTheme {
       contentPadding: EdgeInsets.only(bottom: 2),
     );
   }
+
+  static ListTileThemeData get listTileTheme => ListTileThemeData(
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    tileColor: AppPallete.primaryColor,
+    selectedTileColor: Colors.grey[100],
+    titleTextStyle: AppTextStyles.getTextStyle(16, FontWeight.w500),
+    subtitleTextStyle: AppTextStyles.getTextStyle(14, FontWeight.w400),
+  );
+}
+
 
   static BoxDecoration searchBarDecoration() {
     return BoxDecoration(
