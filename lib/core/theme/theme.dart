@@ -91,8 +91,6 @@ class AppTheme {
     titleTextStyle: AppTextStyles.getTextStyle(16, FontWeight.w500),
     subtitleTextStyle: AppTextStyles.getTextStyle(14, FontWeight.w400),
   );
-}
-
 
   static BoxDecoration searchBarDecoration() {
     return BoxDecoration(
@@ -101,6 +99,7 @@ class AppTheme {
     );
   }
 }
+
 
 bool isShadow = true;
 List<BoxShadow> shadow = [
