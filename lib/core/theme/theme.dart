@@ -4,12 +4,8 @@ import 'package:pva/core/theme/app_pallete.dart';
 import 'package:pva/core/theme/text_styles.dart';
 
 class AppTheme {
+  //border of TextFormField
   static _border([Color color = AppPallete.borderColor]) => OutlineInputBorder(
-        borderSide: BorderSide(
-          color: color,
-          width: 3,
-        ),
-        borderRadius: BorderRadius.circular(10),
       );
 
   static final darkThemeMode = ThemeData.dark().copyWith(
@@ -31,6 +27,16 @@ class AppTheme {
       focusedBorder: _border(AppPallete.gradient2),
       errorBorder: _border(AppPallete.errorColor),
     ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppPallete.primaryBlue,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+        ),
+      )
   );
 
   static final lightThemeMode = ThemeData.light().copyWith(
@@ -54,7 +60,29 @@ class AppTheme {
       focusedBorder: _border(AppPallete.gradient2),
       errorBorder: _border(AppPallete.errorColor),
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppPallete.primaryBlue,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
+    )
   );
+
+  static InputDecoration searchInputDecoration() {
+    return const InputDecoration(
+      hintText: 'Search conversations',
+      hintStyle: TextStyle(
+        color: AppPallete.searchBarTextColor,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      ),
+      contentPadding: EdgeInsets.only(bottom: 2),
+    );
+  }
 
   static ListTileThemeData get listTileTheme => ListTileThemeData(
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -66,7 +94,13 @@ class AppTheme {
 }
 
 
-////bottom nav shadow
+  static BoxDecoration searchBarDecoration() {
+    return BoxDecoration(
+      color: AppPallete.searchBarBackground,
+      borderRadius: BorderRadius.circular(20),
+    );
+  }
+}
 
 bool isShadow = true;
 List<BoxShadow> shadow = [

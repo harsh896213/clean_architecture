@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:pva/core/network/api_error.dart';
 import 'package:pva/core/network/network_client.dart';

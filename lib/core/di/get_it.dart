@@ -4,6 +4,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:pva/core/network/connection_checker.dart';
 import 'package:pva/core/network/network_client.dart';
 import 'package:pva/core/network/networkClient_impl.dart';
+import 'package:pva/feature/appointment/data/datasources/appointment_local_data_source.dart';
 import 'package:pva/feature/auth/data/repositories/auth_repository_impl.dart';
 import 'package:pva/feature/auth/domain/repository/auth_repository.dart';
 import 'package:pva/feature/auth/domain/usecases/user_login.dart';
@@ -25,6 +26,15 @@ import 'package:pva/feature/library%20/data/repositories/library_repository_impl
 import 'package:pva/feature/library%20/domain/repository/library_repository.dart';
 import 'package:pva/feature/library%20/domain/usecases/library_usecase.dart';
 import 'package:pva/feature/library%20/presentation/bloc/library_bloc.dart';
+
+import '../../feature/appointment/data/repositories/appointment_repository_impl.dart';
+import '../../feature/appointment/domain/repository/appointment_repository.dart';
+import '../../feature/appointment/presentation/bloc/appoitment_bloc.dart';
+import '../../feature/chat/data/datasources/local_chat_data_source_impl.dart';
+import '../../feature/chat/data/repositories/chat_repository_impl.dart';
+import '../../feature/chat/domain/repository/chat_repository.dart';
+import '../../feature/chat/presentation/bloc/chat/chat_bloc.dart';
+import '../local/database/data/database_helper.dart';
 
 final getIt = GetIt.instance;
 
@@ -96,6 +106,33 @@ Future<void> setupDependencies() async {
   getIt.registerFactory(
     () => DrawerBloc(getDrawerConfig: getIt())..add(LoadDrawerConfig()),
   );
+
+  final databaseHelper = DatabaseHelper();
+  await databaseHelper.getDatabase();
+  getIt.registerSingleton<DatabaseHelper>(databaseHelper);
+
+  // Data Source
+  getIt.registerLazySingleton<ChatLocalDataSource>(
+        () => ChatLocalDataSourceImpl(databaseHelper: getIt()),
+  );
+
+  getIt.registerLazySingleton<AppointmentLocalDataSource>(() => AppointmentLocalDataSourceImpl(databaseHelper: getIt()));
+
+  getIt.registerLazySingleton<AppointmentRepository>(
+        () => AppointmentRepositoryImpl(localDataSource: getIt()),
+  );
+
+  // Repository
+  getIt.registerLazySingleton<ChatRepository>(
+        () => ChatRepositoryImpl(localDataSource: getIt()),
+  );
+
+  // BLoC
+  getIt.registerFactory(() => ChatBloc(getIt<ChatRepository>()));
+
+  getIt.registerFactory<AppointmentBloc>(
+          () => AppointmentBloc(repository: getIt()));
+
 }
 
 Future<void> _setupLibrary() async {
