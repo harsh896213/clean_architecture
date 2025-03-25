@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/theme/app_pallete.dart';
 
 class FilterListElement extends StatefulWidget {
    String selectedElement;
@@ -28,14 +29,13 @@ class _FilterListElementState extends State<FilterListElement> {
             widget.selectedElement = widget.element[index];
           },
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(12),
             margin: EdgeInsets.only(bottom: 12),
             decoration: BoxDecoration(
               color: widget.selectedElement == widget.element[index]
                   ? context.theme.primaryColor // Highlight when selected
-                  : Colors.white, // Default color
-              borderRadius: BorderRadius.circular(12), // Rounded corners
-              border: Border.all(color: Colors.grey.shade300), // Optional border
+                  : AppPallete.iconBg, // Default color
+              borderRadius: BorderRadius.circular(8), // Rounded corners
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

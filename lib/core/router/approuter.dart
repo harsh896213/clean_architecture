@@ -6,7 +6,6 @@ import 'package:pva/core/router/stateful_shell_route.dart';
 import 'package:pva/feature/assistant/presentation%20/assistant_page.dart';
 import 'package:pva/feature/auth/presentation/pages/login_page.dart';
 import 'package:pva/feature/auth/presentation/pages/signup_page.dart';
-import 'package:pva/feature/home/presentation/details_page.dart';
 import 'package:pva/feature/profile/presentation/pages/profile_page.dart';
 import 'package:pva/feature/splash/splash_page.dart';
 
@@ -37,10 +36,6 @@ GoRouter goRouter = GoRouter(
     GoRoute(
       path: "/signUp",
       builder: (context, state) => SignUpPage(),
-    ),
-    GoRoute(
-      path: "/details",
-      builder: (context, state) => DetailsPage(),
     ),
     GoRoute(
       path: "/profile",
