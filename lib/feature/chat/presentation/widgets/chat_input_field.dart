@@ -1,5 +1,6 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:pva/core/extension/context_ext.dart';
 
 class ChatInputField extends StatefulWidget {
   final Function(String) onSend;
@@ -30,10 +31,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
     setState(() {
       _showEmojiPicker = !_showEmojiPicker;
       if (!_showEmojiPicker) {
-        // When emoji picker is closed, focus the text field to bring up keyboard
         _focusNode.requestFocus();
       } else {
-        // When emoji picker is opened, hide keyboard
         _focusNode.unfocus();
       }
     });
@@ -42,17 +41,14 @@ class _ChatInputFieldState extends State<ChatInputField> {
   void _onEmojiSelected(Category? category, Emoji emoji) {
     print("Emoji selected: ${emoji.emoji}");
 
-    // Simple approach - just append the emoji to the current text
     setState(() {
       _controller.text += emoji.emoji;
     });
 
-    // Move cursor to the end
     _controller.selection = TextSelection.fromPosition(
       TextPosition(offset: _controller.text.length),
     );
 
-    print("Updated text: ${_controller.text}");
   }
 
   void _showAttachmentOptions() {
@@ -203,6 +199,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: TextField(
+                    style: context.textTheme.bodyMedium,
                     controller: _controller,
                     focusNode: _focusNode,
                     decoration: const InputDecoration(

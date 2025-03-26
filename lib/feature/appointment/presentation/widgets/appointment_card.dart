@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pva/core/extension/context_ext.dart';
 
 class AppointmentCard extends StatelessWidget {
   final String doctorName;
@@ -25,6 +26,7 @@ class AppointmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       elevation: 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -58,7 +60,7 @@ class AppointmentCard extends StatelessWidget {
                       // Doctor name
                       Text(
                         doctorName,
-                        style: const TextStyle(
+                        style: context.textTheme.titleMedium?.copyWith(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -69,8 +71,8 @@ class AppointmentCard extends StatelessWidget {
                       // Specialty
                       Text(
                         specialty.isEmpty ? 'Cardiology' : specialty,
-                        style: TextStyle(
-                          fontSize: 15,
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          fontSize: 14,
                           color: Colors.grey[600],
                         ),
                       ),
@@ -88,7 +90,7 @@ class AppointmentCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             time,
-                            style: TextStyle(
+                            style: context.textTheme.bodyMedium?.copyWith(
                               fontSize: 14,
                               color: Colors.grey[800],
                             ),
@@ -111,12 +113,11 @@ class AppointmentCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             isVirtual ? 'Virtual Visit' : 'In-Person Visit',
-                            style: TextStyle(
+                            style: context.textTheme.labelMedium?.copyWith(
                               fontSize: 14,
                               color: isVirtual
                                   ? Colors.blue[600]
                                   : Colors.orange[600],
-                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],

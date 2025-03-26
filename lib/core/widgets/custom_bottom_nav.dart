@@ -33,9 +33,9 @@ class CustomBottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(Icons.home, 0, "Home"),
-              _buildNavItem(Icons.calendar_month, 1, "Appointment"),
+              _buildNavItem(Icons.calendar_month, 1, "Appointments"),
               SizedBox(width: 50), // Space for the Lottie button
-              _buildNavItem(Icons.chat, 3, "Appointment"),
+              _buildNavItem(Icons.chat, 3, "Messages"),
               _buildNavItem(Icons.local_library_sharp, 4, "Library"),
             ],
           ),

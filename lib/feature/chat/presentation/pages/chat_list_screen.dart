@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pva/core/extension/context_ext.dart';
 import 'package:pva/feature/chat/data/models/chat_with_participants.dart';
 
 import '../../../../core/di/get_it.dart';
@@ -16,6 +17,7 @@ import '../bloc/chat/chat_state.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class ChatListScreen extends StatefulWidget {
   final Function(String, String, String) onChatClick;
@@ -165,7 +167,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(24),
                                 child: Image.network(
-                                  getDoctorImageUrl(chat.id),
+                                  getDoctorImageAsset(chat.id),
                                   width: 48,
                                   height: 48,
                                   fit: BoxFit.cover,
@@ -196,10 +198,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                             children: [
                                               Text(
                                                 doctorName,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                ),
+                                                style: context.theme.textTheme.titleMedium,
                                               ),
                                               if (index == 0)
                                                 Container(
@@ -227,10 +226,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
                                     Text(
                                       specialty,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
+                                      style: context.textTheme.bodyMedium,
                                     ),
 
                                     const SizedBox(height: 4),
@@ -248,19 +244,17 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                               shape: BoxShape.circle,
                                             ),
                                           ),
-
                                         Expanded(
                                           child: Text(
                                             messagePreview,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.grey[600],
-                                            ),
+                                            style: context.textTheme.titleLarge
+                                                ?.copyWith(
+                                                    fontSize: 14,
+                                                    color: Colors.grey),
                                           ),
                                         ),
-
                                         if (index == 2)
                                           Container(
                                             margin: const EdgeInsets.only(left: 4),
@@ -366,19 +360,16 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return specialties[hash % specialties.length];
   }
 
-  String getDoctorImageUrl(String chatId) {
+  String getDoctorImageAsset(String chatId) {
     final int hash = chatId.hashCode.abs();
-    final imageUrls = [
-      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1642391324626-7583f5d9696c?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1651008376397-84c60dd87a90?q=80&w=300&h=300&auto=format&fit=crop'
+    final imageAssets = [
+      'assets/images/doctors/doctor1.jpg',
+      'assets/images/doctors/doctor2.jpg',
+      'assets/images/doctors/doctor3.jpg',
+      'assets/images/doctors/doctor4.jpg',
     ];
 
-    return imageUrls[hash % imageUrls.length];
+    return imageAssets[hash % imageAssets.length];
   }
 
   Color getAvatarColor(String chatId) {
