@@ -8,6 +8,7 @@ import 'package:pva/feature/chat/data/models/chat_with_participants.dart';
 import '../../../../core/di/get_it.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/custom_search_bar.dart';
 import '../../data/models/chat.dart';
 import '../../domain/repository/chat_repository.dart';
 import '../bloc/chat/chat_bloc.dart';
@@ -49,56 +50,34 @@ class _ChatListScreenState extends State<ChatListScreen> {
       create: (context) => ChatBloc(getIt<ChatRepository>())..add(LoadChats()),
       child: Column(
         children: [
+// Original snippet replacement
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            child: Container(
+            child: CustomSearchBar(
+              controller: _searchController,
+              hintText: 'Search doctors...',
               height: 44,
-              decoration: AppTheme.searchBarDecoration(),
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.search,
-                    color: AppPallete.searchBarIconColor,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: AppTheme.searchInputDecoration().copyWith(
-                        hintText: 'Search doctors...',
-                      ),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: AppPallete.searchBarTextColor,
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          _searchQuery = value.toLowerCase();
-                        });
-                      },
-                    ),
-                  ),
-                  if (_searchQuery.isNotEmpty)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _searchQuery = '';
-                          _searchController.clear();
-                        });
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Icon(
-                          Icons.clear,
-                          color: AppPallete.searchBarIconColor,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                ],
+              iconColor: AppPallete.searchBarIconColor,
+              iconSize: 24,
+              textColor: AppPallete.searchBarTextColor,
+              textStyle: const TextStyle(
+                fontSize: 16,
+                color: AppPallete.searchBarTextColor,
               ),
+              customDecoration: AppTheme.searchBarDecoration(),
+              padding: EdgeInsets.zero, // Remove padding since we're already in a Padding widget
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value.toLowerCase();
+                });
+              },
+              onClear: () {
+                setState(() {
+                  _searchQuery = '';
+                  _searchController.clear();
+                });
+              },
             ),
           ),
 
