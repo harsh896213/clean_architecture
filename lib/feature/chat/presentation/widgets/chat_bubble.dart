@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pva/core/extension/context_ext.dart';
 
 import '../../data/models/message.dart';
 
@@ -35,7 +36,7 @@ class ChatMessageBubble extends StatelessWidget {
               ),
               child: Text(
                 message.content,
-                style: TextStyle(
+                style: context.textTheme.bodyMedium?.copyWith(
                   color: isFromMe ? Colors.white : Colors.black87,
                   fontSize: 16,
                 ),

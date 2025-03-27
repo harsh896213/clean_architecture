@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pva/core/extension/context_ext.dart';
 
 import '../../../../core/di/get_it.dart';
 import '../../data/models/message.dart';
@@ -171,9 +172,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         children: [
                           Text(
                             'Dr. ${widget.doctorName}',
-                            style: const TextStyle(
+                            style: context.textTheme.titleMedium?.copyWith(
                               fontSize: 16,
-                              fontWeight: FontWeight.w500,
                               color: Colors.black87,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -181,10 +181,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           Text(
                             widget.specialty,
-                            style: TextStyle(
-                              fontSize: 12,
+                            style: context.textTheme.bodyMedium?.copyWith(
                               color: Colors.grey[600],
-                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ],

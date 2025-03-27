@@ -60,6 +60,7 @@ class AppointmentPageContentState extends State<AppointmentPageContent> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
+      backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

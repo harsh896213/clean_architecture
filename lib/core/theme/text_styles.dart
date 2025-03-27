@@ -15,6 +15,7 @@ class AppTextStyles {
   }
 
   static var textTheme = TextTheme(
+    //regular
     bodyLarge: getTextStyle(16, FontWeight.w400),
     bodyMedium: getTextStyle(14, FontWeight.w400),
     bodySmall: getTextStyle(12, FontWeight.w400),
