@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/theme/app_pallete.dart';
 import 'package:pva/core/theme/shadow.dart';
 
 class CustomSearchBar extends StatelessWidget {
@@ -39,62 +41,59 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      child: Container(
-        height: height,
-        decoration: customDecoration ?? BoxDecoration(
-          borderRadius: borderRadius ?? BorderRadius.circular(12),
-          boxShadow: cardShadow,
-          color: backgroundColor ?? Theme.of(context).cardColor,
-        ),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Icon(
-                Icons.search,
-                color: iconColor ?? Theme.of(context).hintColor,
-                size: iconSize,
+    return Container(
+      height: height,
+      decoration: customDecoration ?? BoxDecoration(
+        borderRadius: borderRadius ?? BorderRadius.circular(12),
+        boxShadow: cardShadow,
+        color: backgroundColor ?? Theme.of(context).cardColor,
+      ),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: Icon(
+              Icons.search,
+              color: iconColor ?? Theme.of(context).hintColor,
+              size: iconSize,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              autofocus: autoFocus,
+              style: textStyle ?? TextStyle(
+                fontSize: 16,
+                color: textColor ?? Theme.of(context).textTheme.bodyLarge?.color,
+              ),
+              decoration: InputDecoration(
+                filled: false,
+                hintText: hintText,
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                contentPadding: contentPadding ?? const EdgeInsets.symmetric(vertical: 12),
+              ),
+              onChanged: onChanged,
+            ),
+          ),
+          if (controller?.text.isNotEmpty ?? false)
+            GestureDetector(
+              onTap: () {
+                controller?.clear();
+                onClear?.call();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Icon(
+                  Icons.clear,
+                  color: iconColor ?? AppPallete.secondaryColor,
+                  size: iconSize - 4,
+                ),
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: TextField(
-                controller: controller,
-                autofocus: autoFocus,
-                style: textStyle ?? TextStyle(
-                  fontSize: 16,
-                  color: textColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-                ),
-                decoration: InputDecoration(
-                  filled: false,
-                  hintText: hintText,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  contentPadding: contentPadding ?? const EdgeInsets.symmetric(vertical: 12),
-                ),
-                onChanged: onChanged,
-              ),
-            ),
-            if (controller?.text.isNotEmpty ?? false)
-              GestureDetector(
-                onTap: () {
-                  controller?.clear();
-                  onClear?.call();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Icon(
-                    Icons.clear,
-                    color: iconColor ?? Theme.of(context).hintColor,
-                    size: iconSize - 4,
-                  ),
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

@@ -50,7 +50,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
       create: (context) => ChatBloc(getIt<ChatRepository>())..add(LoadChats()),
       child: Column(
         children: [
-// Original snippet replacement
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             child: CustomSearchBar(

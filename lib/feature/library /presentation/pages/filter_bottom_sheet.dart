@@ -52,6 +52,7 @@ class FilterBottomSheet extends StatelessWidget {
                   iconSize: 35)
             ],
           ),
+          Divider(),
           const SizedBox(height: 20),
           Flexible(
             child: SingleChildScrollView(
@@ -92,7 +93,6 @@ class FilterBottomSheet extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),

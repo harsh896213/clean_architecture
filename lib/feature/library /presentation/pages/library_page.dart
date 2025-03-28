@@ -58,6 +58,9 @@ class _LibraryPageState extends State<LibraryPage> {
               children: [
                 Expanded(
                   child: CustomSearchBar(
+                    onClear: (){
+                      searchController.clear();
+                    },
                     backgroundColor: Colors.white,
                     onChanged: _onSearchValueChange,
                     controller: searchController,

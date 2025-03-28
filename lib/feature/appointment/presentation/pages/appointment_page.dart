@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/widgets/custom_app_bar.dart';
 
 import '../../../../core/di/get_it.dart';
 import '../bloc/appointment_state.dart';
@@ -49,16 +51,12 @@ class AppointmentPageContentState extends State<AppointmentPageContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Appointments'),
-        elevation: 0,
-        titleTextStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-          color: Colors.black,
+      appBar: CustomAppBar(
+        centerTitle: false,
+        title: Text(
+          "Appointments",
+          style: context.textTheme.titleLarge?.copyWith(fontSize: 28),
         ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
       ),
       backgroundColor: Colors.grey[100],
       body: SafeArea(

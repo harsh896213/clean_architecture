@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/widgets/custom_app_bar.dart';
 import 'package:pva/feature/chat/presentation/pages/chat_list_screen.dart';
 import 'package:pva/feature/chat/presentation/pages/chat_screen.dart';
 
@@ -67,18 +68,12 @@ class _MasterDetailChatPageState extends State<MasterDetailChatPage> {
     return BlocProvider.value(
       value: _chatBloc!,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Messages',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+        appBar: CustomAppBar(
+          centerTitle: false,
+          title: Text(
+            "Messages",
+            style: context.textTheme.titleLarge?.copyWith(fontSize: 28),
           ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
         ),
         body: Row(
           children: [
