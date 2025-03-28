@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pva/core/extension/context_ext.dart';
 import 'package:pva/feature/chat/data/models/chat_with_participants.dart';
 
 import '../../../../core/di/get_it.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/custom_search_bar.dart';
 import '../../data/models/chat.dart';
 import '../../domain/repository/chat_repository.dart';
 import '../bloc/chat/chat_bloc.dart';
@@ -16,6 +18,7 @@ import '../bloc/chat/chat_state.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class ChatListScreen extends StatefulWidget {
   final Function(String, String, String) onChatClick;
@@ -47,56 +50,34 @@ class _ChatListScreenState extends State<ChatListScreen> {
       create: (context) => ChatBloc(getIt<ChatRepository>())..add(LoadChats()),
       child: Column(
         children: [
+// Original snippet replacement
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            child: Container(
+            child: CustomSearchBar(
+              controller: _searchController,
+              hintText: 'Search doctors...',
               height: 44,
-              decoration: AppTheme.searchBarDecoration(),
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.search,
-                    color: AppPallete.searchBarIconColor,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: AppTheme.searchInputDecoration().copyWith(
-                        hintText: 'Search doctors...',
-                      ),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: AppPallete.searchBarTextColor,
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          _searchQuery = value.toLowerCase();
-                        });
-                      },
-                    ),
-                  ),
-                  if (_searchQuery.isNotEmpty)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _searchQuery = '';
-                          _searchController.clear();
-                        });
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Icon(
-                          Icons.clear,
-                          color: AppPallete.searchBarIconColor,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                ],
+              iconColor: AppPallete.searchBarIconColor,
+              iconSize: 24,
+              textColor: AppPallete.searchBarTextColor,
+              textStyle: const TextStyle(
+                fontSize: 16,
+                color: AppPallete.searchBarTextColor,
               ),
+              customDecoration: AppTheme.searchBarDecoration(),
+              padding: EdgeInsets.zero, // Remove padding since we're already in a Padding widget
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value.toLowerCase();
+                });
+              },
+              onClear: () {
+                setState(() {
+                  _searchQuery = '';
+                  _searchController.clear();
+                });
+              },
             ),
           ),
 
@@ -165,7 +146,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(24),
                                 child: Image.network(
-                                  getDoctorImageUrl(chat.id),
+                                  getDoctorImageAsset(chat.id),
                                   width: 48,
                                   height: 48,
                                   fit: BoxFit.cover,
@@ -196,10 +177,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                             children: [
                                               Text(
                                                 doctorName,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                ),
+                                                style: context.theme.textTheme.titleMedium,
                                               ),
                                               if (index == 0)
                                                 Container(
@@ -227,10 +205,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
                                     Text(
                                       specialty,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
+                                      style: context.textTheme.bodyMedium,
                                     ),
 
                                     const SizedBox(height: 4),
@@ -248,19 +223,17 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                               shape: BoxShape.circle,
                                             ),
                                           ),
-
                                         Expanded(
                                           child: Text(
                                             messagePreview,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.grey[600],
-                                            ),
+                                            style: context.textTheme.titleLarge
+                                                ?.copyWith(
+                                                    fontSize: 14,
+                                                    color: Colors.grey),
                                           ),
                                         ),
-
                                         if (index == 2)
                                           Container(
                                             margin: const EdgeInsets.only(left: 4),
@@ -366,19 +339,16 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return specialties[hash % specialties.length];
   }
 
-  String getDoctorImageUrl(String chatId) {
+  String getDoctorImageAsset(String chatId) {
     final int hash = chatId.hashCode.abs();
-    final imageUrls = [
-      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1642391324626-7583f5d9696c?q=80&w=300&h=300&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1651008376397-84c60dd87a90?q=80&w=300&h=300&auto=format&fit=crop'
+    final imageAssets = [
+      'assets/images/doctors/doctor1.jpg',
+      'assets/images/doctors/doctor2.jpg',
+      'assets/images/doctors/doctor3.jpg',
+      'assets/images/doctors/doctor4.jpg',
     ];
 
-    return imageUrls[hash % imageUrls.length];
+    return imageAssets[hash % imageAssets.length];
   }
 
   Color getAvatarColor(String chatId) {
