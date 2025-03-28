@@ -33,17 +33,15 @@ class AppointmentCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Doctor info section
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Doctor profile picture
                 CircleAvatar(
                   radius: 30,
                   backgroundImage:
-                      profilePic.isNotEmpty ? NetworkImage(profilePic) : null,
+                  profilePic.isNotEmpty ? NetworkImage(profilePic) : null,
                   onBackgroundImageError: (_, __) {},
                   child: profilePic.isEmpty
                       ? const Icon(Icons.person, size: 30, color: Colors.white)
@@ -52,12 +50,10 @@ class AppointmentCard extends StatelessWidget {
 
                 const SizedBox(width: 16),
 
-                // Doctor information
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Doctor name
                       Text(
                         doctorName,
                         style: context.textTheme.titleMedium?.copyWith(
@@ -68,7 +64,6 @@ class AppointmentCard extends StatelessWidget {
 
                       const SizedBox(height: 4),
 
-                      // Specialty
                       Text(
                         specialty.isEmpty ? 'Cardiology' : specialty,
                         style: context.textTheme.bodyMedium?.copyWith(
@@ -79,7 +74,6 @@ class AppointmentCard extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-                      // Time with icon
                       Row(
                         children: [
                           Icon(
@@ -100,7 +94,6 @@ class AppointmentCard extends StatelessWidget {
 
                       const SizedBox(height: 8),
 
-                      // Appointment type
                       Row(
                         children: [
                           Icon(
@@ -129,27 +122,31 @@ class AppointmentCard extends StatelessWidget {
             ),
           ),
 
-          // Button
           Container(
             width: double.infinity,
-            height: 48,
+            height: 56,
             margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: ElevatedButton(
               onPressed: onTap,
               style: ElevatedButton.styleFrom(
-                backgroundColor: buttonColor ?? Colors.orange,
+                backgroundColor: buttonColor ?? Colors.blue,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
                 elevation: 0,
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               ),
               child: Text(
                 buttonText,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
+                  height: 1.2,
                 ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.visible,
               ),
             ),
           ),

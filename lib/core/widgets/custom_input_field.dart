@@ -51,7 +51,6 @@ class CustomInputField extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // This SizedBox creates space before the TextField
             const SizedBox(width: 16),
             Expanded(
               child: TextField(
@@ -75,7 +74,6 @@ class CustomInputField extends StatelessWidget {
                 maxLines: maxLines,
               ),
             ),
-            // This SizedBox creates space after the TextField
             const SizedBox(width: 16),
           ],
         ),

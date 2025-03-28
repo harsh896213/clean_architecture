@@ -31,6 +31,7 @@ class _LibraryPageState extends State<LibraryPage> {
   @override
   void initState() {
     searchController = TextEditingController();
+    searchController.text = '';
     WidgetsBinding.instance.addPostFrameCallback(
         (timeStamp) => context.read<LibraryBloc>().add(GetLibraryData()));
     super.initState();
