@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/theme/app_pallete.dart';
 
 class AnimatedProgressIndicator extends StatefulWidget {
   final double progress;
   final Color color;
   final double size;
   final double strokeWidth;
+  final String completed;
 
   const AnimatedProgressIndicator({
     super.key,
     required this.progress,
+    required this.completed,
     this.color = Colors.blue,
     this.size = 100,
     this.strokeWidth = 8,
@@ -81,13 +85,23 @@ class _AnimatedProgressIndicatorState extends State<AnimatedProgressIndicator>
                 strokeWidth: widget.strokeWidth,
               ),
             ),
-            Text(
-              '${(_animation.value * 100).toInt()}%',
-              style: TextStyle(
-                fontSize: widget.size * 0.2,
-                fontWeight: FontWeight.bold,
-                color: widget.color,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${(_animation.value * 100).toInt()}%',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  widget.completed,
+                  style: context.textTheme.labelMedium
+                      ?.copyWith(fontSize: 10, color: AppPallete.secondaryColor),
+                ),
+              ],
             ),
           ],
         );

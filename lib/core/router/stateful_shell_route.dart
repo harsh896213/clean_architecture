@@ -7,7 +7,7 @@ import 'package:pva/core/di/get_it.dart';
 import 'package:pva/core/widgets/scaffold_with_bottom_navbar.dart';
 import 'package:pva/feature/chat/presentation/pages/master_detail_chat_page.dart';
 import 'package:pva/feature/home/presentation/bloc/home_bloc.dart';
-import 'package:pva/feature/home/presentation/home_page.dart';
+import 'package:pva/feature/home/presentation/pages/home_page.dart';
 import 'package:pva/feature/library%20/presentation/bloc/library_bloc.dart';
 import 'package:pva/feature/library%20/presentation/pages/library_page.dart';
 import 'package:pva/feature/library%20/presentation/pages/video_player_screen.dart';
@@ -116,9 +116,9 @@ RouteBase stateFulShellRoute() => StatefulShellRoute(
     StatefulShellBranch(
       routes: [
         GoRoute(
-          path: '/appointments',
+          path: '/placeholder',
           builder: (context, state) {
-            return AppointmentPage();
+            return SizedBox();
           },
         ),
       ],

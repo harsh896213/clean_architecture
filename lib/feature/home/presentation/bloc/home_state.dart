@@ -15,6 +15,8 @@ class HomeDataState extends HomeState{
   final String selectedChip;
   final String? activityError;
   final String? tipsOfDayError;
+  final int completedActivity;
+  final int totalActivity;
 
    HomeDataState({
       required this.progress ,
@@ -23,6 +25,8 @@ class HomeDataState extends HomeState{
       required this.filterActivity,
       required this.activities,
       required this.selectedChip,
+      required this.totalActivity,
+      required this.completedActivity,
       this.activityError,
       this.tipsOfDayError
   });
@@ -36,6 +40,8 @@ class HomeDataState extends HomeState{
     String? selectedChip,
     String? activityError,
     String? tipsOfDayError,
+    int? totalActivity,
+    int? completedActivity,
 
   }) {
     return HomeDataState(
@@ -45,6 +51,8 @@ class HomeDataState extends HomeState{
       activities: activities ?? this.activities,
       filterActivity: filterActivity ?? this.filterActivity,
       selectedChip: selectedChip ?? this.selectedChip,
+      totalActivity: totalActivity ?? this.totalActivity,
+      completedActivity: completedActivity ?? this.completedActivity,
       activityError:  activityError ?? this.activityError,
       tipsOfDayError: tipsOfDayError ?? this.tipsOfDayError
     );

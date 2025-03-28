@@ -23,6 +23,9 @@ class LibraryDataState extends LibraryState{
   final List<DocumentEntity> filterDocument;
   final List<FrequentlyAskedQuestionEntity> askedQuestion;
   final List<FrequentlyAskedQuestionEntity> filterAskedQuestion;
+  final String selectedCategory;
+  final String selectedContentType;
+  final int filterCount;
 
   LibraryDataState(
       {
@@ -31,7 +34,10 @@ class LibraryDataState extends LibraryState{
       required this.askedQuestion,
       this.filterResources = const [],
       this.filterDocument = const [],
-      this.filterAskedQuestion = const []
+      this.filterAskedQuestion = const [],
+      this.selectedCategory = "All",
+      this.selectedContentType = "All Types",
+      this.filterCount = 0
       });
 
   LibraryDataState copyWith({
@@ -41,6 +47,9 @@ class LibraryDataState extends LibraryState{
     List<DocumentEntity>? filteredDocument,
     List<FrequentlyAskedQuestionEntity>? askedQuestion,
     List<FrequentlyAskedQuestionEntity>? filteredAskedQuestion,
+    String? selectedCategory,
+    String? selectedContentType,
+    int? filterCount,
   }){
     return LibraryDataState(
         resource: resource ?? this.resource,
@@ -49,6 +58,9 @@ class LibraryDataState extends LibraryState{
         filterDocument: filteredDocument ?? this.filterDocument,
         filterAskedQuestion: filteredAskedQuestion ?? this.filterAskedQuestion,
         askedQuestion: askedQuestion ?? this.askedQuestion,
+        selectedCategory: selectedCategory ?? this.selectedCategory,
+        selectedContentType: selectedContentType ?? this.selectedContentType,
+        filterCount: filterCount ?? this.filterCount,
     );
   }
 

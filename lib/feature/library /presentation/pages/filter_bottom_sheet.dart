@@ -15,15 +15,14 @@ class FilterBottomSheet extends StatelessWidget {
   var category = ["All", "PDF", "DOCX"];
   var contentType = [
     'All Types',
-    'Articles',
-    'Videos',
+    'Article',
+    'Video',
   ];
 
   @override
   Widget build(BuildContext context) {
     context.read<LibraryBloc>();
     return Container(
-      padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -39,9 +38,9 @@ class FilterBottomSheet extends StatelessWidget {
               Spacer(),
               TextButton(
                 onPressed: () {
-                    selectedContentType = 'All Types';
-                    selectedCategory = 'All';
-                  },
+                  selectedContentType = 'All Types';
+                  selectedCategory = 'All';
+                },
                 child: const Text('Clear all'),
               ),
               ButtonFactory().createIconButton(
@@ -49,48 +48,76 @@ class FilterBottomSheet extends StatelessWidget {
                   onPressed: () {
                     context.pop();
                   },
-                  iconSize: 23)
+                  color: Colors.black12,
+                  iconSize: 35)
             ],
           ),
           const SizedBox(height: 20),
-          Expanded(
+          Flexible(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Content Type', style: context.textTheme.titleSmall),
                   const SizedBox(height: 12),
-                  FilterListElement(selectedElement: selectedContentType, element: contentType,),
+                  BlocSelector<LibraryBloc, LibraryState, String>(
+                    selector: (state) {
+                      if (state is LibraryDataState) {
+                        return state.selectedContentType;
+                      }
+                      return "All Types";
+                    },
+                    builder: (context, state) {
+                      return FilterListElement(
+                        type: FilterType.contentTypes,
+                        selectedElement: state ?? "All Types",
+                        element: contentType,);
+                    },
+                  ),
                   const SizedBox(height: 20),
                   Text('Category', style: context.textTheme.titleSmall),
                   const SizedBox(height: 12),
-                  FilterListElement(selectedElement: selectedCategory, element: category,),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context, {
-                          'contentType': selectedContentType,
-                          'category': selectedCategory,
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppPallete.primaryColor,
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child:  Text(
-                        'Apply Filters',
-                        style: context.textTheme.titleSmall
-                            ?.copyWith(color: Colors.white),
-                      ),
-                    ),
+                  BlocSelector<LibraryBloc, LibraryState, String>(
+                    selector: (state) {
+                      if (state is LibraryDataState) {
+                        return state.selectedCategory;
+                      }
+                      return "All";
+                    },
+                    builder: (context, state) {
+                      return FilterListElement(
+                        type: FilterType.category,
+                        selectedElement: state,
+                        element: category,
+                      );
+                    },
                   ),
                   const SizedBox(height: 20),
                 ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<LibraryBloc>().add(FilterLibrary());
+                  context.pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppPallete.primaryColor,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Apply Filters',
+                  style: context.textTheme.titleSmall
+                      ?.copyWith(color: Colors.white),
+                ),
               ),
             ),
           ),

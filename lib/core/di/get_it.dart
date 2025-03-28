@@ -116,7 +116,8 @@ Future<void> setupDependencies() async {
         () => ChatLocalDataSourceImpl(databaseHelper: getIt()),
   );
 
-  getIt.registerLazySingleton<AppointmentLocalDataSource>(() => AppointmentLocalDataSourceImpl(databaseHelper: getIt()));
+  getIt.registerLazySingleton<AppointmentLocalDataSource>(
+      () => AppointmentLocalDataSourceImpl(databaseHelper: getIt()));
 
   getIt.registerLazySingleton<AppointmentRepository>(
         () => AppointmentRepositoryImpl(localDataSource: getIt()),

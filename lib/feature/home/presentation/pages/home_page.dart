@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pva/feature/home/presentation/widget/calendar_page.dart';
+import 'package:pva/feature/home/presentation/pages/dashboard.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

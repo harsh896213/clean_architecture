@@ -14,11 +14,17 @@ class SearchResources extends LibraryEvent{
 }
 
 class FilterLibrary extends LibraryEvent{
-  final String selectedContentType;
-  final String selectedCategory;
 
-  FilterLibrary(
-      {required this.selectedContentType, required this.selectedCategory});
+  FilterLibrary();
+}
+
+class SelectFilterTile extends LibraryEvent{
+  final String? selectedCategory;
+  final String? selectedContentType;
+
+  SelectFilterTile(
+      { this.selectedCategory,  this.selectedContentType});
+
 }
 
 class ToggleAskedQuestion extends LibraryEvent{

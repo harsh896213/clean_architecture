@@ -18,43 +18,47 @@ class RecommendationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=> context.push("/library/video"),
+      onTap: () => context.push("/library/video"),
       child: Container(
-        width: context.width *.7,
+        constraints: BoxConstraints(maxWidth: 300, minHeight: 323),
+        width: context.width * .7,
         height: 323,
         margin: EdgeInsets.only(right: 20),
         decoration: ShapeDecoration(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)
-            ),
-         shadows: cardShadow,
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shadows: cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if(resource.documentType.name == "article")...{
+            if (resource.documentType.name == "article") ...{
               Container(
                 height: 168,
                 decoration: ShapeDecoration(
                     color: AppPallete.iconBg,
-                    shape:
-                    RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10)))),
                 alignment: Alignment.center,
-                child: SvgPicture.asset(ImagePath.document, width: 21, height: 26,),
+                child: SvgPicture.asset(
+                  ImagePath.document,
+                  width: 21,
+                  height: 26,
+                ),
               )
-            }
-            else...{
+            } else ...{
               Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
                     child: CachedNetworkImage(
                         height: 168,
-                        width: 300,
+                        width: context.width * .7,
                         fit: BoxFit.fill,
                         imageUrl: resource.videoInfo?.thumbnail ?? ""),
                   ),
@@ -62,40 +66,52 @@ class RecommendationTile extends StatelessWidget {
                     bottom: 20,
                     right: 10,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                          ),
+                        color: Colors.black45,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      child: Text("12:00", style: TextStyle( color: Colors.black),),
+                      child: Text(
+                        "12:00",
+                        style: context.textTheme.titleSmall
+                            ?.copyWith(fontSize: 12, color: Colors.white),
+                      ),
                     ),
                   ),
                   Positioned(
-                    bottom: 50,
-                    top: 50,
-                    right: 50,
-                    left: 50,
-
-                      child: Icon(Icons.play_circle,color: Colors.white, size: 30,)),
+                      bottom: 50,
+                      top: 50,
+                      right: 50,
+                      left: 50,
+                      child: Icon(
+                        Icons.play_circle,
+                        color: Colors.white,
+                        size: 30,
+                      )),
                 ],
               )
             },
-            Padding(padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 children: [
                   Text(
                     resource.title,
                     style: context.textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 8,),
-                  Text(
-                      resource.desc,
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(resource.desc,
                       maxLines: 2,
                       style: context.textTheme.bodySmall?.copyWith(
                           color: context.theme.secondaryHeaderColor)),
-                  const SizedBox(height: 12,),
+                  const SizedBox(
+                    height: 12,
+                  ),
                   AuthorType(
                     author: resource.author,
                     type: resource.documentType,

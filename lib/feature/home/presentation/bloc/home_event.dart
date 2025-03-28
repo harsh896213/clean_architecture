@@ -24,6 +24,13 @@ class PrevSelectedTime extends HomeEvent {
   List<Object?> get props => [];
 }
 
+class ActivityActionEvent extends HomeEvent{
+  final String id;
+  final ActivityState activityState;
+
+  const ActivityActionEvent({required this.activityState, required this.id});
+}
+
 class UpdateProgress extends HomeEvent {
   final double progress;
 
