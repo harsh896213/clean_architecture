@@ -5,7 +5,9 @@ import 'package:pva/core/theme/app_pallete.dart';
 import 'package:pva/core/theme/shadow.dart';
 import 'package:pva/core/widgets/animated_progressbar.dart';
 import 'package:pva/core/widgets/divider.dart';
+import 'package:pva/feature/home/domain/entity/activity_entity.dart';
 import 'package:pva/feature/home/presentation/bloc/home_bloc.dart';
+import 'package:tuple/tuple.dart';
 
 class ProgressCard extends StatelessWidget {
   final double progress;
@@ -23,9 +25,8 @@ class ProgressCard extends StatelessWidget {
       decoration: ShapeDecoration(
           color: Colors.white,
           shadows: cardShadow,
-          shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24)
-      )),
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(24))),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,53 +35,78 @@ class ProgressCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Care Plan Progress',textAlign: TextAlign.center, style: context.textTheme.titleSmall,),
-                  const SizedBox(height: 20,),
+                  Text(
+                    'Care Plan Progress',
+                    textAlign: TextAlign.center,
+                    style: context.textTheme.titleSmall,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   SizedBox(
                     height: 80,
                     width: 80,
-                    child: AnimatedProgressIndicator(
-                      progress: progress,
+                    child: BlocSelector<HomeBloc,
+                        HomeState,
+                        Tuple2<int, int>>(
+                      selector: (state) {
+                        if(state is HomeDataState){
+                          return Tuple2(state.completedActivity, state.totalActivity);
+                        }
+                        else{
+                          return Tuple2(0, 0);
+                        }
+                        // TODO: return selected state
+                      },
+                      builder: (context, state) {
+                        final completed = state.item1;
+                        final total = state.item2;
+                        return AnimatedProgressIndicator(
+                          progress: (total == 0 ? total : completed/total).toDouble(),
+                          completed: "$completed/$total",
+                        );
+                      },
                     ),
                   ),
                 ],
               ),
             ),
             Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Container(
-              width: 1,
-              color: AppPallete.dividerColor,
-            ),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Container(
+                width: 1,
+                color: AppPallete.dividerColor,
+              ),
             ),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                Text(
-                  textAlign: TextAlign.center,
-                'Tip of the Day', style: context.textTheme.titleSmall,),
-                  SizedBox(height: 10,),
+                  Text(
+                    textAlign: TextAlign.center,
+                    'Tip of the Day',
+                    style: context.textTheme.titleSmall,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   BlocSelector<HomeBloc, HomeState, String>(
                     selector: (state) {
-                      if(state is HomeDataState){
+                      if (state is HomeDataState) {
                         return state.tipOfDay;
-                      }
-                      else{
+                      } else {
                         return "";
                       }
                     },
                     builder: (context, state) {
-                      return Text(
-                        state,
-                        maxLines: 5,
-                        textAlign: TextAlign.center,
-                        style: context.textTheme.bodyMedium?.copyWith(
-                            color: context.theme.secondaryHeaderColor));
+                      return Text(state,
+                          maxLines: 5,
+                          textAlign: TextAlign.center,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.theme.secondaryHeaderColor));
                     },
                   ),
-
                 ],
               ),
             ),

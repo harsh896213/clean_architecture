@@ -12,4 +12,5 @@ class ImagePath{
   static final String document = "assets/svg/document.svg";
   static final String filter = "assets/svg/filter.svg";
   static final String roundedQuestion = "assets/svg/rounded_question.svg";
+  static final String virtualAssistant = "assets/svg/virtual_assistant.svg";
 }

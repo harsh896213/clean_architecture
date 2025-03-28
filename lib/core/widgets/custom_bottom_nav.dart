@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pva/core/widgets/vitual_ssistant.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -33,6 +34,7 @@ class CustomBottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(Icons.home, 0, "Home"),
+
               _buildNavItem(Icons.calendar_month, 1, "Appointments"),
               SizedBox(width: 50), // Space for the Lottie button
               _buildNavItem(Icons.chat, 3, "Messages"),
@@ -41,20 +43,17 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: -75, // Moves the Lottie button up
-          left: MediaQuery.of(context).size.width / 2 - 75,
+          top: -30, // Moves the Lottie button up
+          left: MediaQuery.of(context).size.width / 2 - 25,
           child: GestureDetector(
             // onTap: () => onItemTapped(2),
             onTap: () => context.push("/assistant"),
             child: Hero(
               tag: "heroTag",
               child: SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: Icon(
-                    Icons.brightness_auto,
-                    size: 60,
-                  )),
+                  height: 60,
+                  width: 60,
+                  child: VirtualAssistant()),
             ),
           ),
         ),

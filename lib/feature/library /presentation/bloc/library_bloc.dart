@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:pva/feature/library%20/domain/entities/document.dart';
+import 'package:pva/feature/library%20/domain/entities/filter.dart';
 import 'package:pva/feature/library%20/domain/entities/frequently_asked_question.dart';
 import 'package:pva/feature/library%20/domain/entities/resource.dart';
 import 'package:pva/feature/library%20/domain/usecases/library_usecase.dart';
@@ -17,6 +18,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
     on<GetLibraryData>((event, emit) => _getLibraryData(event, emit));
     on<SearchResources>((event, emit) => _searchResources(event, emit));
     on<FilterLibrary>((event, emit) => _filterLibrary(event, emit));
+    on<SelectFilterTile>((event, emit) => _selectFilterTile(event, emit));
     on<DownloadDocument>((event, emit) => _downloadDocument(event, emit));
     on<ToggleAskedQuestion>((event, emit) => _toggleAskedQuestion(event, emit));
   }
@@ -76,14 +78,44 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
     if(state is! LibraryDataState) return;
 
     var currentState = state as LibraryDataState;
+    int filterCount = 0;
 
-    var filterResource = currentState.resource
-        .where(
-          (element) => element.documentType.toString() == event.selectedCategory,
-        ).toList();
+    if(currentState.selectedCategory != "All"){
+      filterCount++;
+    }
+    if(currentState.selectedContentType != "All Types"){
+      filterCount++;
+    }
 
+    var filterResource = currentState.selectedContentType.toLowerCase() == "All Types".toLowerCase()
+        ? currentState.resource
+        : currentState.resource
+            .where(
+              (element) =>
+                  element.documentType.name.toLowerCase() == currentState.selectedContentType.toLowerCase(),
+            )
+            .toList();
 
-    emit(currentState.copyWith(filterResources: filterResource));
+    var filterDocument = currentState.selectedCategory.toLowerCase() == "all"
+        ? currentState.document
+        : currentState.document
+            .where(
+              (element) =>
+                  element.docType.toLowerCase() == currentState.selectedCategory.toLowerCase(),
+            )
+            .toList();
+
+    emit(currentState.copyWith(filterResources: filterResource, filteredDocument: filterDocument, filterCount: filterCount));
+  }
+
+  void _selectFilterTile(SelectFilterTile event, Emitter<LibraryState> emit) {
+    if(state is! LibraryDataState) return;
+
+    var currentState = state as LibraryDataState;
+
+    emit(currentState.copyWith(
+        selectedContentType: event.selectedContentType,
+        selectedCategory: event.selectedCategory));
   }
 
   void _downloadDocument(DownloadDocument event, Emitter<LibraryState> emit) {

@@ -10,9 +10,10 @@ import 'package:pva/core/theme/shadow.dart';
 import 'package:pva/core/theme/text_styles.dart';
 import 'package:pva/core/widgets/custom_app_bar.dart';
 import 'package:pva/core/widgets/svg_button_container.dart';
-import 'package:pva/feature/home/domain/entity/activity.dart';
+import 'package:pva/feature/home/domain/entity/activity_entity.dart';
 import 'package:pva/feature/home/presentation/bloc/home_bloc.dart';
 import 'package:pva/feature/home/presentation/widget/activity_card.dart';
+import 'package:pva/feature/home/presentation/widget/day_activity.dart';
 import 'package:pva/feature/home/presentation/widget/progress_card.dart';
 import 'package:pva/feature/home/presentation/widget/time_chip.dart';
 import '../../../../core/common/widgets/button/button_factory.dart';
@@ -171,30 +172,11 @@ class _DashboardPageState extends State<DashboardPage> {
                   },
                 )),
             SizedBox(
-              height: 10,
+              height: 16,
             ),
-            BlocSelector<HomeBloc, HomeState, List<Activity>>(
-              selector: (state) {
-                if (state is HomeDataState) {
-                  return state.filterActivity;
-                } else {
-                  return [];
-                }
-              },
-              builder: (context, state) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 20), // Removes extra padding
-                  itemBuilder: (context, index) {
-                    return ActivityCard(
-                        activity: state[index],
-                        onComplete:
-                            () {}); // Replace with ActivityCard widget
-                  },
-                  itemCount: state.length,
-                );
-              },
+            DayActivity(),
+            SizedBox(
+              height: 10,
             ),
           ],
         ),

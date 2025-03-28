@@ -14,26 +14,34 @@ class AuthorType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      spacing: 8,
       children: [
-        Expanded(
-            child: Text(
+        Text(
           author,
-          style: context.textTheme.labelMedium
-              ?.copyWith(color: context.theme.secondaryHeaderColor),
-        )),
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+          style: context.textTheme.labelMedium?.copyWith(
+            color: context.theme.secondaryHeaderColor,
+          ),
+        ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: ShapeDecoration(
-              color: AppPallete.iconBg,
-              shadows: cardShadow,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-              )),
+            color: AppPallete.iconBg,
+            shadows: cardShadow,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
           child: Text(
             type.name.toString() == "article" ? "Article" : "Video",
-            style: context.textTheme.labelMedium?.copyWith(fontSize: 12,color: AppPallete.secondaryColor),
+            style: context.textTheme.labelMedium?.copyWith(
+              fontSize: 12,
+              color: AppPallete.secondaryColor,
+            ),
           ),
-        )
+        ),
       ],
     );
   }

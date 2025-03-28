@@ -1,0 +1,120 @@
+{
+  "tasks": [
+    {
+      "title": "Daily Health Log",
+      "subtitle": "Record your daily health metrics",
+      "icon": "CheckSquare",
+      "color": "#007AFF",
+      "type": "task"
+    },
+    {
+      "title": "Medication Review",
+      "subtitle": "Review and organize medications",
+      "icon": "ClipboardList",
+      "color": "#5856D6",
+      "type": "task"
+    },
+    {
+      "title": "Health Goals Check",
+      "subtitle": "Review weekly health goals",
+      "icon": "CheckSquare",
+      "color": "#34C759",
+      "type": "task"
+    }
+  ],
+  "physical": [
+    {
+      "title": "Morning Exercise",
+      "subtitle": "30 minutes cardio workout",
+      "icon": "Dumbbell",
+      "color": "#34C759",
+      "type": "physical"
+    },
+    {
+      "title": "Strength Training",
+      "subtitle": "Upper body resistance training",
+      "icon": "Dumbbell",
+      "color": "#FF9500",
+      "type": "physical"
+    },
+    {
+      "title": "Evening Walk",
+      "subtitle": "20 minutes brisk walking",
+      "icon": "Activity",
+      "color": "#64D2FF",
+      "type": "physical"
+    }
+  ],
+  "medication": [
+    {
+      "title": "Morning Medication",
+      "subtitle": "Take with breakfast",
+      "icon": "Pill",
+      "color": "#FF9500",
+      "type": "medication"
+    },
+    {
+      "title": "Afternoon Medication",
+      "subtitle": "Take after lunch",
+      "icon": "Pill",
+      "color": "#5856D6",
+      "type": "medication"
+    },
+    {
+      "title": "Evening Medication",
+      "subtitle": "Take before bedtime",
+      "icon": "Pill",
+      "color": "#FF3B30",
+      "type": "medication"
+    }
+  ],
+  "surveys": [
+    {
+      "title": "Wellness Check",
+      "subtitle": "Daily wellness assessment",
+      "icon": "FileSpreadsheet",
+      "color": "#AF52DE",
+      "type": "survey"
+    },
+    {
+      "title": "Symptom Tracker",
+      "subtitle": "Record any symptoms",
+      "icon": "FileSpreadsheet",
+      "color": "#FF2D55",
+      "type": "survey"
+    },
+    {
+      "title": "Medication Efficacy",
+      "subtitle": "Weekly medication review",
+      "icon": "FileSpreadsheet",
+      "color": "#5856D6",
+      "type": "survey"
+    }
+  ],
+  "appointments": [
+    {
+      "title": "Dr. Sarah Wilson",
+      "subtitle": "Cardiology Follow-up",
+      "icon": "Stethoscope",
+      "color": "#007AFF",
+      "type": "appointment",
+      "appointmentType": "virtual"
+    },
+    {
+      "title": "Physical Therapy",
+      "subtitle": "With Dr. James Chen",
+      "icon": "Activity",
+      "color": "#34C759",
+      "type": "appointment",
+      "appointmentType": "in-person"
+    },
+    {
+      "title": "Nutritionist",
+      "subtitle": "Diet Planning Session",
+      "icon": "Users",
+      "color": "#FF9500",
+      "type": "appointment",
+      "appointmentType": "virtual"
+    }
+  ]
+}

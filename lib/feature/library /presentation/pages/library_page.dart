@@ -8,6 +8,7 @@ import 'package:pva/core/theme/shadow.dart';
 import 'package:pva/core/theme/text_styles.dart';
 import 'package:pva/core/utils/debouncer.dart';
 import 'package:pva/core/widgets/custom_app_bar.dart';
+import 'package:pva/core/widgets/custom_bottomsheet.dart';
 import 'package:pva/core/widgets/custom_search_bar.dart';
 import 'package:pva/feature/home/presentation/bloc/home_bloc.dart';
 import 'package:pva/feature/library%20/presentation/bloc/library_bloc.dart';
@@ -41,6 +42,7 @@ class _LibraryPageState extends State<LibraryPage> {
       backgroundColor: AppPallete.iconBg,
       appBar: CustomAppBar(
         centerTitle: false,
+        toolbarHeight: 100,
         title: Text(
           "Library",
           style: context.textTheme.titleLarge?.copyWith(fontSize: 28),
@@ -64,55 +66,78 @@ class _LibraryPageState extends State<LibraryPage> {
                 ),
                 const SizedBox(width: 12,),
                 GestureDetector(
-                  onTap: () => showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.6,
-                    ),
-                    builder: (context1) => BlocProvider.value(
-                      value: context.read<LibraryBloc>(),
-                      child: FilterBottomSheet(),
-                    ),
+                  onTap: ()=> showDynamicBottomSheet(context: context, child:
+                  BlocProvider.value(
+                        value: context.read<LibraryBloc>(),
+                        child: FilterBottomSheet(),
+                      ),
                   ),
-                  child: Badge(
-                    label: Text(
-                      "2",
-                      style:
-                          context.textTheme.titleSmall?.copyWith(fontSize: 12,color: Colors.white),
-                    ),
-                    child: Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          shadows: cardShadow,
+                  child: BlocSelector<LibraryBloc, LibraryState, int>(
+                    selector: (state) {
+                      if (state is LibraryDataState) {
+                        return state.filterCount;
+                      } else {
+                        return 0;
+                      }
+                    },
+                    builder: (context, state) {
+                      return state > 0 ? Badge(
+                        label: Text(
+                          state > 0 ? state.toString() : "",
+                          style: context.textTheme.titleSmall
+                              ?.copyWith(fontSize: 12, color: Colors.white),
                         ),
-                        child: SvgPicture.asset(ImagePath.filter)
-                    ),
+                        child: Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: ShapeDecoration(
+                              color: state > 0 ? AppPallete.primaryColor : Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              shadows: cardShadow,
+                            ),
+                            child: SvgPicture.asset(
+                              width: 20,
+                              height: 20,
+                              ImagePath.filter,
+                              color: Colors.white,
+                            )),
+                      ) : Container(
+                          padding: EdgeInsets.all(12),
+                          decoration: ShapeDecoration(
+                            color: state > 0 ? AppPallete.primaryColor : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            shadows: cardShadow,
+                          ),
+                          child: SvgPicture.asset(
+                            width: 20,
+                            height: 20,
+                            ImagePath.filter,
+                          ));
+                    },
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 10,),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20,),
+                    const SizedBox(height: 10,),
                     Text(
                       "Recommended Resource",
                       style: context.textTheme.titleLarge?.copyWith(fontSize: 20),
                     ),
                     const SizedBox(height: 16,),
-                    SizedBox(
+                    const SizedBox(
                       height: 360,
                       child: Resources(),
                     ),
-                    const SizedBox(height: 30,),
+                    const SizedBox(height: 20,),
                     Text(
                       "Documents",
                       style: context.textTheme.titleLarge?.copyWith(fontSize: 20),

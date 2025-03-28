@@ -10,6 +10,7 @@ class AppPallete {
   static const Color gradient3 = Color.fromRGBO(255, 159, 124, 1);
   static const Color borderColor = Color.fromRGBO(52, 51, 67, 1);
   static const Color iconBg = Color.fromRGBO(245, 247, 250,1);
+  static const Color deactivateCardColor = Color.fromRGBO(248, 248, 248,1);
   static const Color dividerColor = Color.fromRGBO(229, 229, 229,1);
   static const Color whiteColor = Colors.white;
   static const Color greyColor = Colors.grey;

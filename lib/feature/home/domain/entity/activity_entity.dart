@@ -7,17 +7,17 @@ class Activity extends Equatable {
   final DateTime startTime;
   final DateTime endTime;
   final String timeSlot;
-  final bool isCompleted;
+  ActivityState activityState;
   final ActivityType type;
 
-  const Activity({
+  Activity({
     required this.id,
     required this.title,
     required this.description,
     required this.startTime,
     required this.endTime,
     required this.timeSlot,
-    this.isCompleted = false,
+    this.activityState = ActivityState.noActivity,
     required this.type,
   });
 
@@ -30,6 +30,7 @@ class Activity extends Equatable {
     String? timeSlot,
     bool? isCompleted,
     ActivityType? type,
+    ActivityState? activityState,
   }) {
     return Activity(
       id: id ?? this.id,
@@ -38,7 +39,7 @@ class Activity extends Equatable {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       timeSlot: timeSlot ?? this.timeSlot,
-      isCompleted: isCompleted ?? this.isCompleted,
+      activityState: activityState ?? this.activityState,
       type: type ?? this.type,
     );
   }
@@ -51,7 +52,7 @@ class Activity extends Equatable {
     startTime,
     endTime,
     timeSlot,
-    isCompleted,
+    activityState,
     type,
   ];
 }
@@ -81,3 +82,11 @@ enum ActivityType {
     }
   }
 }
+
+enum ActivityState{
+  completed,
+  notCompleted,
+  noActivity
+}
+
+
