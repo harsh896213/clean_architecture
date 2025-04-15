@@ -41,4 +41,7 @@ extension BuildContextExtension on BuildContext {
   bool get isMobile => width < 600;
   bool get isTablet => width >= 600 && width < 1200;
   bool get isDesktop => width >= 1200;
+
+  bool get isLandscape => MediaQuery.of(this).orientation == Orientation.landscape;
+  bool get isPortrait => MediaQuery.of(this).orientation == Orientation.portrait;
 }

@@ -6,8 +6,16 @@ import 'package:pva/core/router/stateful_shell_route.dart';
 import 'package:pva/feature/assistant/presentation%20/assistant_page.dart';
 import 'package:pva/feature/auth/presentation/pages/login_page.dart';
 import 'package:pva/feature/auth/presentation/pages/signup_page.dart';
+import 'package:pva/feature/profile/presentation/pages/care_plan_page.dart';
+import 'package:pva/feature/profile/presentation/pages/consent_document_page.dart';
+import 'package:pva/feature/profile/presentation/pages/edit_profile_page.dart';
 import 'package:pva/feature/profile/presentation/pages/profile_page.dart';
+import 'package:pva/feature/profile/presentation/pages/progress_tracker_page.dart';
 import 'package:pva/feature/splash/splash_page.dart';
+
+import '../../feature/profile/presentation/pages/care_team_information_page.dart';
+import '../../feature/profile/presentation/pages/change_password_page.dart';
+import '../../feature/profile/presentation/pages/personal_information_page.dart';
 
 final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
 
@@ -40,6 +48,34 @@ GoRouter goRouter = GoRouter(
     GoRoute(
       path: "/profile",
       builder: (context, state) => ProfilePage(),
+    ),
+    GoRoute(
+      path: '/personal_information',
+      builder: (context, state) => PersonalInformationScreen(),
+    ),
+    GoRoute(
+      path: '/care_team_information',
+      builder: (context, state) => CareTeamInformationPage(),
+    ),
+    GoRoute(
+        path: '/consent_document',
+        builder: (context, state) => ConsentDocumentPage()
+    ),
+    GoRoute(
+        path: '/care_plan',
+        builder: (context, state) => CarePlanPage()
+    ),
+    GoRoute(
+        path: '/progress_tracker',
+        builder: (context, state) => ProgressTrackerPage()
+    ),
+    GoRoute(
+        path: '/change_password',
+        builder: (context, state) => ChangePasswordPage()
+    ),
+    GoRoute(
+        path: '/edit_profile',
+        builder: (context, state) => EditProfilePage()
     ),
     stateFulShellRoute()
   ],
