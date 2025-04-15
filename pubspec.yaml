@@ -56,6 +56,9 @@ dependencies:
   flutter_svg: ^2.0.17
   emoji_picker_flutter: ^1.6.1
   tuple: ^2.0.1
+  firebase_messaging: ^14.7.4
+  flutter_local_notifications: ^15.1.1
+  firebase_core: ^2.22.0
 
 
 dev_dependencies:
