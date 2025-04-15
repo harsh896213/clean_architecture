@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pva/core/extension/context_ext.dart';
+import 'package:pva/core/theme/app_pallete.dart';
 import 'package:pva/core/theme/text_styles.dart';
 import 'package:pva/feature/profile/domain/entities/info.dart';
 
@@ -42,7 +43,7 @@ class InfoTile extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(info.title, style: context.textTheme.labelLarge,),
+        Text(info.title, style: context.textTheme.labelLarge?.copyWith(color: AppPallete.secondaryColor),),
         Text(info.value, style: context.textTheme.labelLarge,),
       ],
     );

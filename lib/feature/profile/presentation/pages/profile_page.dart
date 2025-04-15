@@ -27,7 +27,7 @@ class ProfilePage extends StatelessWidget {
             Text("Harsh Rajan",textAlign: TextAlign.start, style: context.textTheme.titleLarge?.copyWith(fontSize: 24),),
             Text("harsh@gmail.com", style: context.textTheme.bodyLarge,),
            Container(
-             padding: EdgeInsets.symmetric(horizontal: 16),
+             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
              child: Column(
                spacing: 10,
                crossAxisAlignment: CrossAxisAlignment.start,
