@@ -204,8 +204,8 @@ final messages = [
 ];
 
 final appointments = [
-  Appointment(id: '1', doctorId: '3', patientId: '1', dateTime: DateTime(2025, 3, 26,10,0 ), isVirtual: 0, profilePic: 'https://images.unsplash.com/photo-1742112008263-1079370d69e7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-  Appointment(id: '2', doctorId: '3', patientId: '1', dateTime: DateTime(2025, 3, 27,10,0 ), isVirtual: 0, profilePic: 'https://images.unsplash.com/photo-1742112008263-1079370d69e7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-  Appointment(id: '3', doctorId: '4', patientId: '1', dateTime: DateTime(2025, 3, 28,10,0 ), isVirtual: 1, profilePic: 'https://images.unsplash.com/photo-1742112008263-1079370d69e7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-  Appointment(id: '4', doctorId: '3', patientId: '1', dateTime: DateTime(2025, 3, 28,10,0 ), isVirtual: 0, profilePic: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+  Appointment(id: '1', doctorId: '3', patientId: '1', dateTime: DateTime(2025, 4, 7,10,0 ), isVirtual: 0, profilePic: 'https://images.unsplash.com/photo-1742112008263-1079370d69e7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+  Appointment(id: '2', doctorId: '3', patientId: '1', dateTime: DateTime(2025, 4, 8,10,0 ), isVirtual: 0, profilePic: 'https://images.unsplash.com/photo-1742112008263-1079370d69e7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+  Appointment(id: '3', doctorId: '4', patientId: '1', dateTime: DateTime(2025, 4, 9,10,0 ), isVirtual: 1, profilePic: 'https://images.unsplash.com/photo-1742112008263-1079370d69e7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+  Appointment(id: '4', doctorId: '3', patientId: '1', dateTime: DateTime(2025, 4, 10,10,0 ), isVirtual: 0, profilePic: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
 ];
