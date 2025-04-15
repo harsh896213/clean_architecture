@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:pva/core/extension/context_ext.dart';
-import 'package:pva/core/theme/text_styles.dart';
-import 'package:pva/feature/profile/domain/entities/info.dart';
-import 'package:pva/feature/profile/presentation/widget/information_tile.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../widget/profile_header.dart';
+import '../widget/profile_menu_item.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -11,52 +11,119 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipOval(
-              child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 100,
-                  imageUrl:
-                      "https://images.pexels.com/photos/6616204/pexels-photo-6616204.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"),
-            ),
-            Text("Harsh Rajan",textAlign: TextAlign.start, style: context.textTheme.titleLarge?.copyWith(fontSize: 24),),
-            Text("harsh@gmail.com", style: context.textTheme.bodyLarge,),
-           Container(
-             padding: EdgeInsets.symmetric(horizontal: 16),
-             child: Column(
-               spacing: 10,
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Text("Personal Information", style: context.textTheme.titleLarge?.copyWith(fontSize: 20),),
-                 InformationTile(infos: [
-                   Info(title: "Date of Birth", value: "April 15, 1985"),
-                   Info(title: "Blood Type", value: "o+"),
-                   Info(title: "height", value: "178 cm"),
-                   Info(title: "weight", value: "75 kg")
-                 ],),
-                 Text("Emergency Contact", style: context.textTheme.titleLarge?.copyWith(fontSize: 20),),
-                 InformationTile(infos: [
-                   Info(title: "Name", value: "Sarah Chen"),
-                   Info(title: "Relationship", value: "Spouse"),
-                   Info(title: "Phone", value: "+91 23838928"),
-                 ],),
-                 Text("Medical History", style: context.textTheme.titleLarge?.copyWith(fontSize: 20),),
-                 InformationTile(infos: [
-                   Info(title: "Allergies", value: "Pencillin"),
-                   Info(title: "Condition", value: "High Bp"),
-                   Info(title: "Past surgery", value: "Heart Operation"),
-                 ],),
-               ],
-             ),
-           )
-          ],
+      appBar: const CustomAppBar(
+        title: Text(
+          'My Profile',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      )),
+        centerTitle: false,
+        automaticallyImplyLeading: true,
+        backgroundColor: Colors.white,
+        titleColor: Colors.black,
+        elevation: 0,
+      ),
+      body: Column(
+        children: [
+          const Divider(height: 1, thickness: 1, color: Color(0xFFEEEEEE)),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+
+                  const ProfileHeader(
+                    imageUrl: 'assets/profile_image.png',
+                    name: 'Simon Riley',
+                    id: '89373652',
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  ProfileMenuItem(
+                    title: 'Personal Information',
+                    onTap: () {
+                      context.push("/personal_information");
+                    },
+                  ),
+
+                  ProfileMenuItem(
+                    title: 'Care Team Information',
+                    onTap: () {
+                      context.push("/care_team_information");
+                    },
+                  ),
+
+                  ProfileMenuItem(
+                    title: 'Consent Document',
+                    onTap: () {
+                      context.push("/consent_document");
+                    },
+                  ),
+
+                  ProfileMenuItem(
+                    title: 'Care Plan',
+                    onTap: () {
+                      context.push("/care_plan");
+                    },
+                  ),
+
+                  ProfileMenuItem(
+                    title: 'Progress Tracker',
+                    onTap: () {
+                      context.push("/progress_tracker");
+                    },
+                  ),
+
+                  ProfileMenuItem(
+                    title: 'Change Password',
+                    onTap: () {
+                      context.push("/change_password");
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Logout button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 12.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle logout
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 56),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons.logout, size: 20),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

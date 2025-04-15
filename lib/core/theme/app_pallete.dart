@@ -42,6 +42,7 @@ class AppPallete {
   static const Color unreadIndicator = Color(0xFF4CAF50);
 
   static const searchBarBackground = Color(0xFFF5F5F5);
+  static const cardBackground = Color(0xFFF8F9FF);
   static const searchBarTextColor = Color(0xFF757575);
   static const searchBarIconColor = Color(0xFF757575);
 }
